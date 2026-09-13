@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="vendor/latofonts.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="vendor/jquery.min.js"></script>
+  <script src="vendor/emoji.js"></script>
+  <script src="js/script.js"></script>
+  <title>GZL Chat</title>
+</head>
+<body>
+  <div class="container">
+    <div class="message-box" style="opacity: 0;"></div>
+    <div class="chat-input-part" style="display: none;">
+      <div class="chat-input">
+        <input id="chat-text-input" placeholder="Bir komut veya mesaj yazın... (/ yardım)" type="text" autocomplete="off" spellcheck="false" />
+        <div id="notification" class="notification">
+          <img id="notification-img" src="img/bell.png" />
+        </div>
+      </div>
+      <div class="chat-emoji">
+        <img id="chat-emoji-icon" src="img/emoji.png" />
+        <div class="chat-emoji-menu" style="display: none;"></div>
+      </div>
+    </div>
+    <div class="suggestions" style="display: none;"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<meta>
+    <info author="thommy" name="GZL Roleplay - ATM &amp; Banking DX System" type="script" version="1.0.0" />
+
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+
+    <map src="maps/fleeca_map.map" dimension="0" />
+
+    <script src="shared/config.lua" type="shared" cache="false" />
+    <script src="server/database.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+    <script src="client/model.lua" type="client" cache="false" />
+    <script src="client/interaction.lua" type="client" cache="false" />
+    <script src="client/gui.lua" type="client" cache="false" />
+
+    <file src="assets/otb_machine.dff" />
+    <file src="assets/otb_machine.txd" />
+    <file src="assets/fleeca.dff" />
+    <file src="assets/fleeca.txd" />
+    <file src="assets/fleeca.col" />
+
+    <export function="openATM" type="client" />
+    <export function="closeATM" type="client" />
+    <export function="isATMOpen" type="client" />
+    <export function="isATMEditing" type="client" />
+</meta>

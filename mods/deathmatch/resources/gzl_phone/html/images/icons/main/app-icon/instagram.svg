@@ -1,0 +1,53 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="app-icon">
+
+            <!-- ===== DEFINITIONS ===== -->
+            <defs>
+               <linearGradient id="instagram-bgGradientDark" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#525755"/>
+                    <stop offset="0.52" stop-color="#232625"/>
+                    <stop offset="1" stop-color="#181A19"/>
+               </linearGradient>
+               <linearGradient id="instagram-iconGradient" x1="73.0693" y1="27.2993" x2="29.5693" y2="72.2993" gradientUnits="userSpaceOnUse">
+                    <stop offset="0.100962" stop-color="#065BFC"/>
+                    <stop offset="0.490385" stop-color="#C62493"/>
+                    <stop offset="0.625" stop-color="#D14971"/>
+                    <stop offset="0.81" stop-color="#E5823B"/>
+                    <stop offset="0.92" stop-color="#FAB858"/>
+               </linearGradient>
+               <linearGradient id="instagram-bgGradient" x1="98.5" y1="1.00001" x2="8.83639e-06" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#065BFC"/>
+                    <stop offset="0.355769" stop-color="#C62493"/>
+                    <stop offset="0.663462" stop-color="#D14971"/>
+                    <stop offset="0.807692" stop-color="#E5823B"/>
+                    <stop offset="0.923077" stop-color="#FAB858"/>
+               </linearGradient>
+            </defs>
+
+            <!-- ================= DARK ================= -->
+            <g class="icon-dark" style="display: none;">
+                <!-- Dark gradient background -->
+                <rect width="100" height="100" fill="url(#instagram-bgGradientDark)" />
+
+                <!-- Instagram gradient icon -->
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M73.069 47.1898V66.2687C72.3412 69.5412 70.319 71.5419 66.9813 72.25H32.5887C29.4141 71.7088 27.7282 69.7046 27 66.7592V32.5342C27.0201 28.8644 29.1053 27.2239 32.6327 27H67.1574C70.8313 27.1711 72.6813 29.1345 72.9296 32.6711L73.069 47.1898ZM63.9387 32.3306C65.6518 32.3306 67.0423 33.7215 67.0423 35.4342C67.0423 37.1472 65.6514 38.5377 63.9387 38.5377C62.2257 38.5377 60.8352 37.1468 60.8352 35.4342C60.8352 33.7211 62.2261 32.3306 63.9387 32.3306ZM49.9067 35.3401C57.7863 35.3401 64.1835 41.7204 64.1835 49.5792C64.1835 57.438 57.7863 63.8183 49.9067 63.8183C42.0271 63.8183 35.6299 57.438 35.6299 49.5792C35.6299 41.7204 42.0271 35.3401 49.9067 35.3401Z" fill="url(#instagram-iconGradient)"/>
+            </g>
+
+            <!-- ================= TINTED ================= -->
+            <g class="icon-tinted" style="display: none;">
+                <!-- Solid background (theme controlled) -->
+                <rect width="100" height="100" fill="var(--icon-bg, #D9D9D9)" />
+
+                <!-- Tintable icon -->
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M72.9997 46.8905V65.9693C72.2719 69.2419 70.2497 71.2426 66.912 71.9507H32.5194C29.3447 71.4095 27.6588 69.4053 26.9307 66.4598V32.2348C26.9507 28.5651 29.0359 26.9246 32.5634 26.7007H67.0881C70.762 26.8718 72.612 28.8352 72.8602 32.3718L72.9997 46.8905ZM63.8694 32.0313C65.5824 32.0313 66.9729 33.4222 66.9729 35.1348C66.9729 36.8479 65.5821 38.2384 63.8694 38.2384C62.1564 38.2384 60.7659 36.8475 60.7659 35.1348C60.7659 33.4218 62.1567 32.0313 63.8694 32.0313ZM49.8374 35.0408C57.7169 35.0408 64.1141 41.4211 64.1141 49.2799C64.1141 57.1387 57.7169 63.519 49.8374 63.519C41.9578 63.519 35.5606 57.1387 35.5606 49.2799C35.5606 41.4211 41.9578 35.0408 49.8374 35.0408Z" fill="currentColor"/>
+            </g>
+
+            <!-- ================= DEFAULT ================= -->
+            <g class="icon-default" style="display: block;">
+                <!-- Instagram gradient background -->
+                <rect width="100" height="100" fill="url(#instagram-bgGradient)" />
+
+                <!-- White icon -->
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M72.9997 46.8905V65.9693C72.2719 69.2419 70.2497 71.2426 66.912 71.9507H32.5194C29.3447 71.4095 27.6588 69.4053 26.9307 66.4598V32.2348C26.9507 28.5651 29.0359 26.9246 32.5634 26.7007H67.0881C70.762 26.8718 72.612 28.8352 72.8602 32.3718L72.9997 46.8905ZM63.8694 32.0313C65.5824 32.0313 66.9729 33.4222 66.9729 35.1348C66.9729 36.8479 65.5821 38.2384 63.8694 38.2384C62.1564 38.2384 60.7659 36.8475 60.7659 35.1348C60.7659 33.4218 62.1567 32.0313 63.8694 32.0313ZM49.8374 35.0408C57.7169 35.0408 64.1141 41.4211 64.1141 49.2799C64.1141 57.1387 57.7169 63.519 49.8374 63.519C41.9578 63.519 35.5606 57.1387 35.5606 49.2799C35.5606 41.4211 41.9578 35.0408 49.8374 35.0408Z" fill="white"/>
+            </g>
+
+        </svg>

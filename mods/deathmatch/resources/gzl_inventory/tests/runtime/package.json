@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "description": "Lua syntax and mocked MTA lifecycle checks",
+  "dependencies": {
+    "fengari": "0.1.5",
+    "luaparse": "0.3.1"
+  }
+}

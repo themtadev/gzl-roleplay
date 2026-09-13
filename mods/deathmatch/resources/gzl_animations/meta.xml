@@ -1,0 +1,53 @@
+<meta>
+    <info author="yuikawa22 / GZL Roleplay" type="script" name="gzl_animations" version="1.3.1" />
+
+    <script src="client/anim_list.lua" type="client" cache="false" />
+    <script src="client/main.lua" type="client" cache="false" />
+    <script src="client/layers.lua" type="client" cache="false" />
+    <script src="client/sit.lua" type="client" cache="false" />
+    <script src="client/handsup.lua" type="client" cache="false" />
+    <script src="server/idle.lua" type="server" />
+    <script src="server/sit.lua" type="server" />
+    <script src="server/handsup.lua" type="server" />
+
+    <export function="isAnimationsEnabled" type="client" />
+    <export function="setAnimationsEnabled" type="client" />
+    <export function="setPedAnimationLayer" type="client" />
+    <export function="clearPedAnimationLayer" type="client" />
+    <export function="hasPedAnimationLayers" type="client" />
+
+    <file src="files/biked.ifp" download="true" />
+    <file src="files/bikeh.ifp" download="true" />
+    <file src="files/bikes.ifp" download="true" />
+    <file src="files/bikev.ifp" download="true" />
+    <file src="files/bmx.ifp" download="true" />
+    <file src="files/buddy.ifp" download="true" />
+    <file src="files/carry.ifp" download="true" />
+    <file src="files/chainsaw.ifp" download="true" />
+    <file src="files/choppa.ifp" download="true" />
+    <file src="files/colt45.ifp" download="true" />
+    <file src="files/dildo.ifp" download="true" />
+    <file src="files/fat.ifp" download="true" />
+    <file src="files/fight_b.ifp" download="true" />
+    <file src="files/fight_c.ifp" download="true" />
+    <file src="files/fight_d.ifp" download="true" />
+    <file src="files/fight_e.ifp" download="true" />
+    <file src="files/muscular.ifp" download="true" />
+    <file src="files/ped.ifp" download="true" />
+    <file src="files/playidles.ifp" download="true" />
+    <file src="files/python.ifp" download="true" />
+    <file src="files/quad.ifp" download="true" />
+    <file src="files/rifle.ifp" download="true" />
+    <file src="files/shotgun.ifp" download="true" />
+    <file src="files/silenced.ifp" download="true" />
+    <file src="files/skate.ifp" download="true" />
+    <file src="files/swim.ifp" download="true" />
+    <file src="files/sword.ifp" download="true" />
+    <file src="files/two_handed_drive.ifp" download="true" />
+    <file src="files/better_run.ifp" download="true" />
+    <file src="files/uzi.ifp" download="true" />
+    <file src="files/wayfarer.ifp" download="true" />
+    <file src="files/wuzi.ifp" download="true" />
+    <file src="files/sit.ifp" download="true" />
+    <file src="files/gta5_sit.ifp" download="true" />
+</meta>

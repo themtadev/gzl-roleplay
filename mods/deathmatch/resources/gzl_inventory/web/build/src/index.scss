@@ -1,0 +1,656 @@
+// =========================================================================
+// OX INVENTORY - DARK LUXURY SLATE HIGH PERFORMANCE STYLESHEET
+// =========================================================================
+
+$mainColor: rgba(15, 23, 42, 0.95); // Luxury Slate 900
+$secondaryColor: rgba(30, 41, 59, 0.75); // Slate 800
+$secondaryColorHighlight: rgba(51, 65, 85, 0.85); // Slate 700
+$secondaryColorLight: rgba(15, 23, 42, 0.6);
+$secondaryColorDark: rgba(15, 23, 42, 0.98);
+
+$textColor: #f1f5f9;
+$subTextColor: #94a3b8;
+$borderColor: rgba(51, 65, 85, 0.6);
+$accentColor: #38bdf8; // Sky 400
+
+$mainFont: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+$gridCols: 5;
+$gridRows: 5;
+$gridSize: 10.2vh;
+$gridGap: 4px;
+$containerSize: calc(#{$gridRows} * #{$gridSize + 0.22vh} + #{$gridRows} * #{$gridGap});
+
+body {
+  margin: 0;
+  font-family: $mainFont;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: auto;
+  height: 100vh;
+  background: transparent !important;
+  overflow: hidden !important;
+  user-select: none;
+  contain: strict;
+}
+
+#root {
+  height: 100%;
+}
+
+code {
+  font-family: monospace;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+  font-family: $mainFont;
+  text-rendering: auto;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.app-wrapper {
+  height: 100%;
+  width: 100%;
+  color: white;
+}
+
+// Context Menu
+.context-menu-list {
+  min-width: 200px;
+  background-color: $mainColor;
+  color: $textColor;
+  padding: 6px;
+  border: 1px solid $borderColor;
+  border-radius: 6px;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  contain: content;
+}
+
+.context-menu-item {
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  color: $textColor;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.12s ease;
+
+  &:active {
+    transform: none;
+  }
+  &:hover {
+    background-color: $secondaryColorHighlight;
+    cursor: pointer;
+  }
+}
+
+.tooltip-description {
+  padding-top: 5px;
+}
+
+.tooltip-markdown > p {
+  margin: 0;
+}
+
+button:active {
+  transform: translateY(2px);
+}
+
+// Optimized GPU Layer Drag Preview
+.item-drag-preview {
+  width: 7.7vh;
+  height: 7.7vh;
+  z-index: 1000;
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 7vh;
+  image-rendering: -webkit-optimize-contrast;
+  contain: strict;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.inventory-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 20px;
+  contain: layout style;
+}
+
+// Controls panel
+.inventory-control {
+  display: flex;
+
+  .inventory-control-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .inventory-control-input {
+    transition: background-color 0.15s ease;
+    padding: 14px 10px;
+    border-radius: 6px;
+    font-family: $mainFont;
+    font-size: 15px;
+    text-align: center;
+    outline: none;
+    border: 1px solid $borderColor;
+    color: #fff;
+    background-color: $secondaryColor;
+
+    &:focus-within {
+      background-color: $secondaryColorDark;
+      border-color: $accentColor;
+    }
+  }
+
+  .inventory-control-button,
+  .inventory-control__button {
+    font-size: 13px;
+    color: #fff;
+    background-color: $secondaryColor;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid $borderColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    &:hover {
+      background-color: $secondaryColorHighlight;
+      border-color: $accentColor;
+      cursor: pointer;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &--use:hover {
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    &--drop:hover {
+      border-color: #f59e0b;
+      color: #f59e0b;
+    }
+
+    &--close:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+  }
+}
+
+// Useful controls dialog
+.useful-controls-dialog {
+  background-color: $mainColor;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: $textColor;
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid $borderColor;
+  gap: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.useful-controls-dialog-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.useful-controls-dialog-title {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.useful-controls-dialog-close {
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  fill: $textColor;
+
+  &:hover {
+    background-color: $secondaryColorHighlight;
+    cursor: pointer;
+  }
+}
+
+.useful-controls-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.useful-controls-button {
+  position: absolute !important;
+  bottom: 25px;
+  right: 25px;
+  transition: background-color 0.15s ease !important;
+  border: 1px solid $borderColor;
+  color: white;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  fill: white;
+  border-radius: 8px !important;
+  background-color: $secondaryColor !important;
+
+  &:hover {
+    background-color: $secondaryColorDark !important;
+    cursor: pointer;
+  }
+}
+
+.useful-controls-exit-button {
+  position: absolute !important;
+  right: 12px;
+  top: 12px;
+  border-radius: 4px !important;
+  color: $subTextColor !important;
+}
+
+// Inventory grid
+.inventory-grid-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inventory-grid-header-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2px;
+
+  p {
+    font-size: 15px;
+    font-weight: 600;
+    color: $textColor;
+  }
+}
+
+.inventory-grid-container {
+  display: grid;
+  height: $containerSize;
+  grid-template-columns: repeat($gridCols, $gridSize);
+  grid-auto-rows: $gridSize + 0.22vh;
+  gap: $gridGap;
+  overflow-y: scroll;
+  contain: content;
+  will-change: scroll-position;
+}
+
+// High Performance Isolated Inventory Slot
+.inventory-slot {
+  background-color: $secondaryColor;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 6px;
+  image-rendering: -webkit-optimize-contrast;
+  position: relative;
+  background-size: 6.8vh;
+  color: $textColor;
+  border: 1px solid $borderColor;
+  contain: layout style;
+  // Hover changes once; avoid repainting every transition frame in CEF.
+  transition: none;
+
+  &:hover {
+    border-color: $accentColor;
+    background-color: $secondaryColorHighlight;
+  }
+}
+
+.inventory-slot--empty {
+  background-color: rgba(30, 41, 59, 0.35);
+  border-color: rgba(51, 65, 85, 0.3);
+
+  &:hover {
+    border-color: rgba(148, 163, 184, 0.4);
+  }
+}
+
+.inventory-slot-label-box {
+  background-color: $mainColor;
+  color: $textColor;
+  text-align: center;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top: 1px solid $borderColor;
+  contain: content;
+}
+
+.inventory-slot-label-text {
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 2px 4px;
+  font-weight: 500;
+  font-family: $mainFont;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+}
+
+.inventory-slot-number {
+  background-color: $accentColor;
+  color: #0f172a;
+  height: 14px;
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: $mainFont;
+  line-height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-slot-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+  p {
+    font-size: 12px;
+  }
+}
+
+.item-slot-header-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.item-hotslot-header-wrapper {
+  @extend .item-slot-header-wrapper;
+  justify-content: space-between !important;
+}
+
+.item-slot-info-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-self: flex-end;
+  padding: 3px;
+  gap: 3px;
+
+  p {
+    font-size: 11px;
+    font-weight: 500;
+    color: $subTextColor;
+  }
+}
+
+.item-slot-currency-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 4px;
+
+  p {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4ade80;
+  }
+}
+
+.item-slot-price-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-right: 4px;
+
+  p {
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+// Tooltip
+.tooltip-wrapper {
+  pointer-events: none;
+  display: flex;
+  background-color: $mainColor;
+  width: 220px;
+  padding: 10px;
+  flex-direction: column;
+  min-width: 200px;
+  color: $textColor;
+  font-family: $mainFont;
+  border-radius: 6px;
+  border: 1px solid $borderColor;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  contain: content;
+
+  p {
+    font-size: 12px;
+    font-weight: 400;
+    color: $subTextColor;
+  }
+}
+
+.tooltip-header-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    font-size: 14px;
+    font-weight: 600;
+    color: $textColor;
+  }
+}
+
+.tooltip-crafting-duration {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    padding-right: 3px;
+  }
+  p {
+    font-size: 13px;
+  }
+}
+
+.tooltip-ingredients {
+  padding-top: 6px;
+}
+
+.tooltip-ingredient {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  img {
+    width: 24px;
+    height: 24px;
+    padding-right: 6px;
+  }
+}
+
+// Hotbar
+.hotbar-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  width: 100%;
+  position: absolute;
+  bottom: 2.5vh;
+  contain: layout style;
+}
+
+.hotbar-item-slot {
+  @extend .inventory-slot;
+  width: $gridSize;
+  height: $gridSize;
+}
+
+.hotbar-slot-header-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 2px;
+}
+
+// Item Notifications
+.item-notification-container {
+  display: flex;
+  overflow-x: scroll;
+  flex-wrap: nowrap;
+  gap: 4px;
+  position: absolute;
+  bottom: 20vh;
+  left: 50%;
+  width: 100%;
+  margin-left: calc(50% - calc($gridSize / 2));
+  transform: translate(-50%);
+  contain: layout style;
+}
+
+.item-notification-action-box {
+  width: 100%;
+  color: $textColor;
+  background-color: $secondaryColor;
+  text-transform: uppercase;
+  text-align: center;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  font-family: $mainFont;
+
+  p {
+    font-size: 11px;
+    padding: 2px;
+    font-weight: 600;
+  }
+}
+
+.item-notification-item-box {
+  @extend .inventory-slot;
+  height: $gridSize;
+  width: $gridSize;
+}
+
+.durability-bar {
+  background: rgba(15, 23, 42, 0.8);
+  height: 3px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.weight-bar {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid $borderColor;
+  height: 0.8vh;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+// Transitions (Optimized Opacity Only)
+.transition-fade-enter {
+  opacity: 0;
+}
+
+.transition-fade-enter-active {
+  opacity: 1;
+  transition: opacity 120ms ease;
+}
+
+.transition-fade-exit {
+  opacity: 1;
+}
+
+.transition-fade-exit-active {
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.transition-slide-up-enter {
+  transform: translate3d(0, 100px, 0);
+  opacity: 0;
+}
+
+.transition-slide-up-enter-active {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.transition-slide-up-exit {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+}
+
+.transition-slide-up-exit-active {
+  transform: translate3d(0, 100px, 0);
+  opacity: 0;
+  transition: transform 150ms ease, opacity 150ms ease;
+}

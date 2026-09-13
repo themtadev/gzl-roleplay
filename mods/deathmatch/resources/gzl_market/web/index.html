@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Market</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="market-app" class="market-viewport" style="display: none;">
+        <div class="market-backdrop"></div>
+        
+        <div class="market-frame">
+            <!-- Top and Bottom Hazard Caution Stripe Bars -->
+            <div class="hazard-stripe-bar top-hazard-bar"></div>
+            <div class="hazard-stripe-bar bottom-hazard-bar"></div>
+
+            <!-- Grunge Splashes -->
+            <div class="grunge-splash top-left-splash"></div>
+            <div class="grunge-splash top-right-splash"></div>
+
+            <!-- Left Main Area: Header, Categories, Products Grid -->
+            <div class="market-left-pane">
+                <header class="market-header">
+                    <div class="brand-row">
+                        <span class="market-title">RISK MARKETS</span>
+                        <div class="market-logo-wrap">
+                            <img class="market-logo-img" src="assets/images/risk_logo.png" alt="Risk Logo" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                    <span class="market-subtitle">Open 24/7 Market!</span>
+                </header>
+
+                <div class="category-tabs-wrapper">
+                    <nav id="category-row" class="category-tabs-row"></nav>
+                    <div class="category-accent-line"></div>
+                </div>
+
+                <main class="products-scroll-area">
+                    <div id="products-grid" class="products-grid-matrix"></div>
+                </main>
+            </div>
+
+            <!-- Right Area: Cart -->
+            <aside class="market-cart-pane">
+                <div class="cart-header-row">
+                    <div class="cart-title-block">
+                        <h2 class="cart-main-title">Cart</h2>
+                        <span class="cart-subtitle-text">Manage your cart and review your items.</span>
+                    </div>
+                    <button id="cart-close-btn" class="cart-close-box" title="Close">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="#ff5050" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 4px rgba(255, 80, 80, 0.7));">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="cart-body-view" class="cart-body-view">
+                    <!-- Empty State -->
+                    <div id="cart-empty-view" class="cart-empty-view">
+                        <div class="basket-3d-icon">
+                            <img src="assets/images/cart_basket.png" alt="Basket" class="basket-img" onerror="this.style.display='none'">
+                        </div>
+                        <span class="cart-empty-label">Your cart is empty.</span>
+                    </div>
+
+                    <!-- Filled State -->
+                    <div id="cart-filled-view" class="cart-filled-view" style="display: none;"></div>
+                </div>
+
+                <!-- Bottom Checkout & Total -->
+                <div class="cart-payment-bottom">
+                    <div class="cart-metallic-divider">
+                        <span class="metallic-dot left"></span>
+                        <span class="metallic-line"></span>
+                        <span class="metallic-slash-accent">//</span>
+                        <span class="metallic-line short"></span>
+                        <span class="metallic-dot right"></span>
+                    </div>
+
+                    <div class="cart-total-line">
+                        <span class="cart-total-title">Total</span>
+                        <span id="cart-total-amount" class="cart-total-green">$ 0</span>
+                    </div>
+
+                    <div class="cart-payment-buttons">
+                        <button id="pay-cash-btn" class="payment-action-btn">Cash</button>
+                        <button id="pay-card-btn" class="payment-action-btn">Card</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <div id="toast-container" class="toast-stack"></div>
+    </div>
+
+    <script src="js/sound.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

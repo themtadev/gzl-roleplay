@@ -1,0 +1,117 @@
+<meta>
+    <info author="GZL Roleplay" type="script" name="GZL Risk Market DX" version="2.0.0" />
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <script src="shared/config.lua" type="shared" cache="false" />
+    <script src="shared/shops.lua" type="shared" cache="false" />
+    <script src="server/transactions.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+    <script src="client/dx.lua" type="client" cache="false" />
+    <script src="client/markers.lua" type="client" cache="false" />
+    <script src="client/main.lua" type="client" cache="false" />
+
+    <export function="openMarket" type="client" />
+    <export function="closeMarket" type="client" />
+    <export function="isMarketOpen" type="client" />
+    <export function="openPlayerMarket" type="server" />
+
+    <include resource="gzl_ui" />
+
+    <file src="web/assets/images/box.png" />
+    <file src="web/assets/images/ekmek.png" />
+    <file src="web/assets/images/hamburger.png" />
+    <file src="web/assets/images/pizzaslice.png" />
+    <file src="web/assets/images/donut.png" />
+    <file src="web/assets/images/chocolate.png" />
+    <file src="web/assets/images/chocho.png" />
+    <file src="web/assets/images/fries.png" />
+    <file src="web/assets/images/buritto.png" />
+    <file src="web/assets/images/baget.png" />
+    <file src="web/assets/images/irishpub_watermelon.png" />
+    <file src="web/assets/images/water.png" />
+    <file src="web/assets/images/atoms-sprunk.png" />
+    <file src="web/assets/images/cola.png" />
+    <file src="web/assets/images/coffee.png" />
+    <file src="web/assets/images/portakal_suyu.png" />
+    <file src="web/assets/images/milkshake.png" />
+    <file src="web/assets/images/icetea.png" />
+    <file src="web/assets/images/enerji_icecegi.png" />
+    <file src="web/assets/images/adv_rep_kit.png" />
+    <file src="web/assets/images/flashlight.png" />
+    <file src="web/assets/images/lockpick.png" />
+    <file src="web/assets/images/drill.png" />
+    <file src="web/assets/images/cutter.png" />
+    <file src="web/assets/images/phone.png" />
+    <file src="web/assets/images/radio.png" />
+    <file src="web/assets/images/camera.png" />
+    <file src="web/assets/images/powerbank.png" />
+    <file src="web/assets/images/laptop.png" />
+    <file src="web/assets/images/bandage.png" />
+    <file src="web/assets/images/medikit.png" />
+    <file src="web/assets/images/cigaret.png" />
+    <file src="web/assets/images/lighter.png" />
+    <file src="web/assets/images/bag.png" />
+    <file src="web/assets/images/irishpub_coconut_drink.png" />
+    <file src="web/assets/images/limonata.png" />
+    <file src="web/assets/images/beer.png" />
+    <file src="web/assets/images/icecream.png" />
+    <file src="web/assets/images/bolchips.png" />
+    <file src="web/assets/images/sandwich.png" />
+    <file src="web/assets/images/incikolye.png" />
+    <file src="web/assets/images/anemone.png" />
+    <file src="web/assets/images/gozluk.png" />
+    <file src="web/assets/images/merhem1.png" />
+    <file src="web/assets/images/clothe.png" />
+    <file src="web/assets/images/ayakkabi.png" />
+    <file src="web/assets/images/diving_gear.png" />
+    <file src="web/assets/images/blowtorch.png" />
+    <file src="web/assets/images/cleaningkit.png" />
+    <file src="web/assets/images/petrol.png" />
+    <file src="web/assets/images/battery.png" />
+    <file src="web/assets/images/normalparca.png" />
+    <file src="web/assets/images/nos.png" />
+    <file src="web/assets/images/WEAPON_GLOCK.png" />
+    <file src="web/assets/images/WEAPON_COMBATPISTOL.png" />
+    <file src="web/assets/images/WEAPON_HEAVYPISTOL.png" />
+    <file src="web/assets/images/WEAPON_PUMPSHOTGUN.png" />
+    <file src="web/assets/images/WEAPON_SAWNOFFSHOTGUN.png" />
+    <file src="web/assets/images/ammo-9.png" />
+    <file src="web/assets/images/ammo-shotgun.png" />
+    <file src="web/assets/images/ammo-smg.png" />
+    <file src="web/assets/images/armor.png" />
+    <file src="web/assets/images/painkillers.png" />
+    <file src="web/assets/images/aspirin.png" />
+    <file src="web/assets/images/merhem3.png" />
+    <file src="web/assets/images/defibrillator.png" />
+    <file src="web/assets/images/babyvitamin.png" />
+    <file src="web/assets/images/drone.png" />
+    <file src="web/assets/images/cryptostick.png" />
+    <file src="web/assets/images/fitbit.png" />
+    <file src="web/assets/images/phone_3d.svg" />
+    <file src="web/assets/images/radio_3d.svg" />
+    <file src="web/assets/images/laptop_3d.svg" />
+    <file src="web/assets/images/tablet_3d.svg" />
+    <file src="web/assets/images/camera_3d.svg" />
+    <file src="web/assets/images/headset_3d.svg" />
+    <file src="web/assets/images/cable_3d.svg" />
+    <file src="web/assets/images/usb_3d.svg" />
+    <file src="web/assets/images/cat_burger_3d.svg" />
+    <file src="web/assets/images/cat_bottle_3d.svg" />
+    <file src="web/assets/images/cat_tool_3d.svg" />
+    <file src="web/assets/images/cat_laptop_3d.svg" />
+    <file src="web/assets/images/cat_watch_3d.svg" />
+    <file src="web/assets/images/risk_logo.png" />
+    <file src="web/assets/images/cart_basket.png" />
+    <file src="web/assets/images/item_needle.png" />
+    <file src="web/assets/images/item_wrist_watch.png" />
+    <file src="web/assets/images/item_newspaper.png" />
+    <file src="web/assets/images/cat_tools.png" />
+    <file src="web/assets/images/cat_electronics.png" />
+    <file src="web/assets/images/cat_general.png" />
+    <file src="web/assets/images/cat_fashion.png" />
+    <file src="web/assets/images/cat_souvenirs.png" />
+    <file src="web/assets/images/cat_office.png" />
+    <file src="web/assets/images/WEAPON_BRIEFCASE.PNG" />
+    <file src="web/assets/images/WEAPON_DIGISCANNER.png" />
+</meta>

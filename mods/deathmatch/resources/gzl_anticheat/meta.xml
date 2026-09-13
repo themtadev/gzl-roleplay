@@ -1,0 +1,6 @@
+<meta>
+    <info name="GZL Server Security" author="GZL" type="script" version="1.0.0" />
+    <min_mta_version server="1.6.0-9.22930" />
+    <script src="server.lua" type="server" />
+    <export function="allowEvent" type="server" />
+</meta>

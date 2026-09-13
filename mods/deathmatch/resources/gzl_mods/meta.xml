@@ -1,0 +1,27 @@
+<meta>
+    <info author="GZL Roleplay" type="script" name="GZL Mod Loader" version="1.0.0" description="High-performance automated vehicle, weapon and skin mod loader" />
+
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <script src="shared/config.lua" type="shared" cache="false" />
+    <script src="client/main.lua" type="client" cache="false" />
+    <script src="server/main.lua" type="server" />
+
+    <export function="reloadModLoader" type="server" />
+
+    <file src="files/plate.fx" />
+    <file src="files/plate_tr.png" />
+    <file src="mods/skins/19/19.dff" />
+    <file src="mods/skins/19/19.txd" />
+    <file src="mods/skins/33/33.dff" />
+    <file src="mods/skins/33/33.txd" />
+    <file src="mods/skins/79/79.dff" />
+    <file src="mods/skins/79/79.txd" />
+    <file src="mods/vehicles/elegant/elegant.dff" />
+    <file src="mods/vehicles/elegant/elegant.txd" />
+    <file src="mods/vehicles/infernus/pagani.dff" />
+    <file src="mods/vehicles/infernus/pagani.txd" />
+    <file src="mods/vehicles/rcraider/rcraider.dff" />
+    <file src="mods/vehicles/rcraider/rcraider.txd" />
+</meta>

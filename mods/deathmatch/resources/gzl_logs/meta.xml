@@ -1,0 +1,21 @@
+<meta>
+    <info author="Antigravity" type="script" name="gzl_logs" version="1.0.0" description="GZL Roleplay - Centralized SQLite Audit Trail" />
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <!-- Shared -->
+    <script src="shared/config.lua" type="shared" />
+
+    <!-- Server -->
+    <script src="server/database.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+
+    <!-- Server Exports -->
+    <export function="logAdmin" type="server" />
+    <export function="logMoney" type="server" />
+    <export function="logItem" type="server" />
+    <export function="logCombat" type="server" />
+    <export function="logSession" type="server" />
+    <export function="logSystem" type="server" />
+    <export function="queryLogs" type="server" />
+</meta>

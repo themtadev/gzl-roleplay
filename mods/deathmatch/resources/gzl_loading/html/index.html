@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>GZL Roleplay</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <svg class="svg-bank" aria-hidden="true">
+        <symbol id="i-discord" viewBox="0 0 24 24"><path d="M19.5 5.3A16.3 16.3 0 0 0 15.4 4l-.5 1.1a15 15 0 0 0-5.8 0L8.6 4a16.7 16.7 0 0 0-4.1 1.3C1.9 9.2 1.2 13 1.6 16.8a16.5 16.5 0 0 0 5 2.5l1.2-1.7a10.7 10.7 0 0 1-1.9-.9l.5-.4c3.6 1.7 7.6 1.7 11.2 0l.5.4c-.6.4-1.2.7-1.9.9l1.2 1.7a16.5 16.5 0 0 0 5-2.5c.5-4.4-.8-8.2-2.9-11.5ZM8.8 14.5c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.4 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M18.9 2h3.7l-8.1 9.3L24 22h-7.4l-5.8-7.6L4.2 22H.5l8.6-9.8L0 2h7.6l5.2 6.9L18.9 2Zm-1.3 18.1h2L6.5 3.8H4.4l13.2 16.3Z"/></symbol>
+        <symbol id="i-tiktok" viewBox="0 0 24 24"><path d="M16.6 1c.4 2.5 1.8 4 4.4 4.2v3.4c-1.5.1-2.9-.3-4.3-1.2v6.4c0 8.1-8.8 10.6-12.4 4.8C2 14.8 4.7 9.4 10 9.2v3.6c-.5.1-1 .2-1.4.5-1.4.9-1.5 2.6-.8 3.7 1.4 2.2 5.2 1.4 5.2-2.1V1h3.6Z"/></symbol>
+        <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M4.7 7.5H1V23h3.7V7.5ZM2.9 1A2.2 2.2 0 1 0 3 5.4 2.2 2.2 0 0 0 3 1ZM23 13.5c0-4.7-2.5-6.9-5.9-6.9-2.7 0-3.9 1.5-4.6 2.5V7.5H8.8V23h3.7v-7.7c0-2 .4-4 2.9-4 2.4 0 2.5 2.3 2.5 4.1V23H23v-9.5Z"/></symbol>
+        <symbol id="i-instagram" viewBox="0 0 24 24"><path d="M7.1 2h9.8A5.1 5.1 0 0 1 22 7.1v9.8a5.1 5.1 0 0 1-5.1 5.1H7.1A5.1 5.1 0 0 1 2 16.9V7.1A5.1 5.1 0 0 1 7.1 2Zm-.2 2A2.9 2.9 0 0 0 4 6.9v10.2A2.9 2.9 0 0 0 6.9 20h10.2a2.9 2.9 0 0 0 2.9-2.9V6.9A2.9 2.9 0 0 0 17.1 4H6.9Zm10.7 1.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></symbol>
+        <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13.5a3.5 3.5 0 1 1-2-3.2V7L11 8.3V18a3.5 3.5 0 1 1-2-3.2Z"/></symbol>
+        <symbol id="i-prev" viewBox="0 0 24 24"><path d="M6 5h2v14H6V5Zm3 7 10-7v14L9 12Z"/></symbol>
+        <symbol id="i-next" viewBox="0 0 24 24"><path d="M16 5h2v14h-2V5ZM5 5l10 7-10 7V5Z"/></symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4Zm8 0h4v16h-4V4Z"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 13 8-13 8V4Z"/></symbol>
+        <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4V9Zm12.5-.8a5 5 0 0 1 0 7.6l-1.3-1.5a3 3 0 0 0 0-4.6l1.3-1.5Zm2.8-3a9 9 0 0 1 0 13.6L18 17.3a7 7 0 0 0 0-10.6l1.3-1.5Z"/></symbol>
+        <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21S3 16 3 9.5C3 5.5 8 3 12 7c4-4 9-1.5 9 2.5C21 16 12 21 12 21Z"/></symbol>
+        <symbol id="i-list" viewBox="0 0 24 24"><path d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h11v2H4v-2Z"/></symbol>
+        <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h12l3 3v15H4V3h1Zm2 2v5h10V5H7Zm5 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></symbol>
+        <symbol id="i-image" viewBox="0 0 24 24"><path d="M4 3h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm0 2v11l4-4 3 3 3-3 6 6V5H4Zm12 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM9 13c-4 0-7 2-7 5v2h14v-2c0-3-3-5-7-5Zm7.5-.8c-.8 0-1.5.1-2.1.3 2.2 1.2 3.6 3.1 3.6 5.5v2h4v-2c0-3.2-2.4-5.8-5.5-5.8Z"/></symbol>
+        <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M16 3h5v5l-2-2-3.5 3.5-1.4-1.4L17.6 5 16 3ZM3 6h4c2 0 3.4 1.2 4.7 2.9l5 6.3L19 13v5h-5l1.3-1.3-5.1-6.4C9.1 8.9 8.4 8 7 8H3V6Zm0 10h4c1 0 1.7-.5 2.5-1.5l1.2 1.6C9.7 17.3 8.6 18 7 18H3v-2Z"/></symbol>
+    </svg>
+    <main id="screen">
+        <section class="brand-block">
+            <div class="brand-row">
+                <div class="brand-mark"><span>G</span><b>ZL</b></div>
+                <div class="brand-name"><strong>GZL</strong><span>RP</span></div>
+            </div>
+            <h2>Information</h2>
+            <p>GZL Roleplay dünyasına hoş geldin.</p>
+        </section>
+
+        <section class="player glass">
+            <div class="track-row">
+                <div class="album"><span>G</span><b>ZL</b></div>
+                <div class="track-meta"><strong id="track-title">Gece Sürüşü</strong><span id="track-artist">GZL RP</span></div>
+            </div>
+            <div class="timeline-wrap">
+                <input id="timeline" type="range" min="0" max="44" value="0" step="0.1">
+                <div class="time-row"><span id="current-time">0:00</span><span id="duration">0:44</span></div>
+            </div>
+            <div class="controls">
+                <button id="shuffle" class="icon-button"><svg><use href="#i-shuffle"/></svg></button>
+                <button id="previous" class="icon-button"><svg><use href="#i-prev"/></svg></button>
+                <button id="play" class="play-button"><svg><use href="#i-play"/></svg></button>
+                <button id="next" class="icon-button"><svg><use href="#i-next"/></svg></button>
+                <button id="volume" class="icon-button"><svg><use href="#i-volume"/></svg></button>
+                <button id="favorite" class="heart-button"><svg><use href="#i-heart"/></svg></button>
+            </div>
+            <div class="player-tabs glass">
+                <button class="player-label"><svg><use href="#i-music"/></svg><span>Müzik Çalar</span></button>
+                <button class="tab active" data-action="music"><svg><use href="#i-music"/></svg><span>Müzik</span></button>
+                <button class="tab" data-action="shuffle"><svg><use href="#i-shuffle"/></svg></button>
+                <button class="tab" data-action="queue"><svg><use href="#i-list"/></svg></button>
+            </div>
+        </section>
+
+        <nav class="socials">
+            <button data-social="discord"><svg><use href="#i-discord"/></svg></button>
+            <button data-social="x"><svg><use href="#i-x"/></svg></button>
+            <button data-social="tiktok"><svg><use href="#i-tiktok"/></svg></button>
+            <button class="active" data-social="linkedin"><svg><use href="#i-linkedin"/></svg></button>
+            <button data-social="instagram"><svg><use href="#i-instagram"/></svg></button>
+        </nav>
+
+        <nav class="dock glass">
+            <button data-panel="about"><svg><use href="#i-save"/></svg></button>
+            <button data-panel="gallery"><svg><use href="#i-image"/></svg></button>
+            <button data-panel="team"><svg><use href="#i-users"/></svg></button>
+            <button data-panel="tracks"><svg><use href="#i-music"/></svg></button>
+            <button data-panel="updates"><svg><use href="#i-image"/></svg></button>
+        </nav>
+
+        <section id="info-panel" class="info-panel glass" aria-hidden="true">
+            <button id="close-panel" class="panel-close">×</button>
+            <div id="panel-content"></div>
+        </section>
+
+        <div class="loaded-count"><span id="loaded-count">0</span> mod paket yüklendi</div>
+        <div class="loading-status glass">
+            <div><span id="loading-label">Oyun yükleniyor</span> (<span id="loading-percent">0</span>%)</div>
+            <small>MTA:SA 1.6</small>
+            <span class="spinner"></span>
+            <div class="progress-line"><i id="progress-fill"></i></div>
+        </div>
+        <div id="toast" class="toast glass"></div>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>

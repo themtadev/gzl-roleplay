@@ -1,0 +1,26 @@
+<meta>
+    <info author="thommy" name="GZL Roleplay - Character System" type="script" version="1.1.0" />
+
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+    
+    <script src="shared/config.lua" type="shared" />
+    <script src="server/database.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+    <script src="client/studio.lua" type="client" cache="false" />
+    <script src="client/gui.lua" type="client" cache="false" />
+
+    <export function="saveCharacter" type="server" />
+    <export function="saveAllCharacters" type="server" />
+    <export function="getCharacterDB" type="server" />
+    <export function="getPlayerCash" type="server" />
+    <export function="setPlayerCash" type="server" />
+    <export function="givePlayerCash" type="server" />
+    <export function="takePlayerCash" type="server" />
+    <export function="getPlayerBank" type="server" />
+    <export function="setPlayerBank" type="server" />
+    <export function="givePlayerBank" type="server" />
+    <export function="takePlayerBank" type="server" />
+    <export function="getAuthoritativeCharacterID" type="server" />
+    <export function="isPlayerCharacterLoggedIn" type="server" />
+</meta>

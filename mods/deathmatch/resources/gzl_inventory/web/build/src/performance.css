@@ -1,0 +1,2 @@
+/* Preserve the shipped design; only isolate the moving drag layer. */
+.item-drag-preview { will-change: transform; contain: strict; z-index: 1000; }

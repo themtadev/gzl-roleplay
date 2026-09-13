@@ -1,0 +1,23 @@
+<meta>
+    <info author="GZL Development Team" type="script" name="Cylex MTA Smartphone" version="2.0.0" />
+    <min_mta_version client="1.6.0-9.22430.0" server="1.6.0-9.22430.0" />
+    <oop>true</oop>
+    <include resource="gzl_animations" />
+
+    <script src="config.lua" type="shared" cache="false" />
+    <script src="server/database.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+    <script src="client/camera.lua" type="client" cache="false" />
+    <script src="client/holding.lua" type="client" cache="false" />
+    <script src="client/cef.lua" type="client" cache="false" />
+
+    <file src="components/hold_phone.ifp" />
+    <file src="components/camera-preview.fx" />
+    <file src="html/**/*" />
+
+    <export function="togglePhone" type="client" />
+    <export function="isPhoneOpenState" type="client" />
+    <export function="isKeypadTypingActive" type="client" />
+    <export function="sendPhoneNotification" type="server" />
+    <export function="getPhoneNumber" type="server" />
+</meta>

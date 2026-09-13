@@ -1,0 +1,1 @@
+.scroll-container[data-v-9584746b]{height:100%;overflow:auto}#scroll-trigger-top[data-v-9584746b],#scroll-trigger-bottom[data-v-9584746b]{height:1vh}.scroll-container[data-v-9584746b]::-webkit-scrollbar{display:none}.inf-scroll-appear{animation:infScrollAppear .6s ease both}@keyframes infScrollAppear{0%{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}

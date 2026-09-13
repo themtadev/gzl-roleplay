@@ -1,0 +1,26 @@
+<meta>
+    <info author="thommy" type="script" name="GZL GTA V Pause Menu &amp; Big Map" version="1.0.0" />
+    
+    <script src="client/gui.lua" type="client" />
+    
+    <file src="client/map.fx" />
+    <file src="assets/map.jpg" />
+    <file src="assets/font_bold.ttf" />
+    <file src="assets/font_medium.ttf" />
+    
+    <file src="assets/icons/user.svg" />
+    <file src="assets/icons/police.svg" />
+    <file src="assets/icons/hospital.svg" />
+    <file src="assets/icons/bank.svg" />
+    <file src="assets/icons/gas.svg" />
+    <file src="assets/icons/shirt.svg" />
+    <file src="assets/icons/scissors.svg" />
+    <file src="assets/icons/wrench.svg" />
+    <file src="assets/icons/diamond.svg" />
+    <file src="assets/icons/pin.svg" />
+    
+    <export function="setWaypoint" type="client" />
+    <export function="getWaypoint" type="client" />
+    <export function="clearWaypoint" type="client" />
+    <export function="isPauseMenuOpen" type="client" />
+</meta>

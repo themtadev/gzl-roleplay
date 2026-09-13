@@ -1,0 +1,47 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="app-icon">
+
+            <!-- ===== DEFINITIONS ===== -->
+            <defs>
+               <linearGradient id="house-bgGradientDark" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#525755"/>
+                    <stop offset="0.52" stop-color="#232625"/>
+                    <stop offset="1" stop-color="#181A19"/>
+               </linearGradient>
+               <linearGradient id="house-iconGradient" x1="34.5" y1="74" x2="65.5" y2="29.5" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#F9C320"/>
+                    <stop offset="1" stop-color="#F84C06"/>
+               </linearGradient>
+               <linearGradient id="house-bgGradient" x1="50.5432" y1="99" x2="50.4577" y2="0.999992" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#F0F0F0"/>
+                    <stop offset="0.355769" stop-color="white"/>
+               </linearGradient>
+            </defs>
+
+            <!-- ================= DARK ================= -->
+            <g class="icon-dark" style="display: none;">
+                <!-- Dark gradient background -->
+                <rect width="100" height="100" fill="url(#house-bgGradientDark)" />
+
+                <!-- Yellow-orange gradient icon -->
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M46.3856 74.4116H31.5V54.1211H23.7313V53.3289H23V52.5377L49.5377 26H51.0391L57.2588 32.2197V29.8894H65.0342V40.25L77.4313 52.6472V53.3165H76.8204V54.1577H69.0141V74.3711H54.2606V64.2451C53.6194 59.2655 46.6211 59.5803 46.3887 64.2451L46.3849 74.4113L46.3856 74.4116Z" fill="url(#house-iconGradient)"/>
+            </g>
+
+            <!-- ================= TINTED ================= -->
+            <g class="icon-tinted" style="display: none;">
+                <!-- Solid background (theme controlled) -->
+                <rect width="100" height="100" fill="var(--icon-bg, #D9D9D9)" />
+
+                <!-- Tintable icon -->
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M46.3856 74.4116H31.5V54.1211H23.7313V53.3289H23V52.5377L49.5377 26H51.0391L57.2588 32.2197V29.8894H65.0342V40.25L77.4313 52.6472V53.3165H76.8204V54.1577H69.0141V74.3711H54.2606V64.2451C53.6194 59.2655 46.6211 59.5803 46.3887 64.2451L46.3849 74.4113L46.3856 74.4116Z" fill="currentColor"/>
+            </g>
+
+            <!-- ================= DEFAULT ================= -->
+            <g class="icon-default" style="display: block;">
+                <!-- White gradient background -->
+                <rect width="100" height="100" fill="url(#house-bgGradient)" />
+
+                <!-- Yellow-orange gradient icon -->
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M46.3856 74.4116H31.5V54.1211H23.7313V53.3289H23V52.5377L49.5377 26H51.0391L57.2588 32.2197V29.8894H65.0342V40.25L77.4313 52.6472V53.3165H76.8204V54.1577H69.0141V74.3711H54.2606V64.2451C53.6194 59.2655 46.6211 59.5803 46.3887 64.2451L46.3849 74.4113L46.3856 74.4116Z" fill="url(#house-iconGradient)"/>
+            </g>
+
+        </svg>

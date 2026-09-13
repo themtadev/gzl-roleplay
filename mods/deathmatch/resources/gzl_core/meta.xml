@@ -1,0 +1,15 @@
+<meta>
+    <info author="thommy" type="script" name="GZL Roleplay - Core" version="1.0.0" description="GZL Roleplay Altyapı Çekirdek Sistemi" />
+
+    <script src="shared/config.lua" type="shared" />
+    <script src="server/main.lua" type="server" />
+    <script src="server/admin.lua" type="server" />
+    <script src="client/main.lua" type="client" />
+    <script src="client/admin.lua" type="client" />
+
+    <export function="isWalkByDefaultActive" type="client" />
+    <export function="setWalkByDefaultActive" type="client" />
+    <export function="isPlayerTyping" type="client" />
+    <export function="isAdmin" type="server" />
+    <export function="isAdmin" type="client" />
+</meta>

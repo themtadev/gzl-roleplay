@@ -1,0 +1,7 @@
+<meta>
+    <info author="GZL Roleplay" type="script" name="gzl_firstperson" version="1.0.0" />
+    <script src="client/main.lua" type="client" />
+    <export function="toggleFirstPerson" type="client" />
+    <export function="isFirstPersonActive" type="client" />
+    <export function="setFirstPersonActive" type="client" />
+</meta>

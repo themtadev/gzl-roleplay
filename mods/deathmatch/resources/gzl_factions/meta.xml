@@ -1,0 +1,38 @@
+<meta>
+    <info author="Antigravity" type="script" name="gzl_factions" version="1.0.0" description="GZL Roleplay - Faction Engine &amp; Duty System" />
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <!-- Shared -->
+    <script src="shared/config.lua" type="shared" />
+
+    <!-- Client -->
+    <script src="client/gui.lua" type="client" cache="false" />
+
+    <!-- Server -->
+    <script src="server/database.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+    <script src="server/vault.lua" type="server" />
+    <script src="server/network.lua" type="server" />
+    <script src="server/commands.lua" type="server" />
+    <script src="server/exports.lua" type="server" />
+
+    <!-- Client Exports -->
+    <export function="openFactionPanel" type="client" />
+    <export function="closeFactionPanel" type="client" />
+    <export function="toggleFactionPanel" type="client" />
+
+    <!-- Server Exports -->
+    <export function="getPlayerFaction" type="server" />
+    <export function="getPlayerFactionData" type="server" />
+    <export function="isPlayerInFaction" type="server" />
+    <export function="isPlayerOnDuty" type="server" />
+    <export function="getPlayerFactionRank" type="server" />
+    <export function="setPlayerDuty" type="server" />
+    <export function="setPlayerFaction" type="server" />
+    <export function="removePlayerFaction" type="server" />
+    <export function="getFactionVault" type="server" />
+    <export function="modifyFactionVault" type="server" />
+    <export function="getFactionMembers" type="server" />
+    <export function="getFactions" type="server" />
+</meta>

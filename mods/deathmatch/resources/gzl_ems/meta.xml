@@ -1,0 +1,23 @@
+<meta>
+    <info author="thommy" name="GZL Roleplay - Liquid Glass EMS &amp; Coma System" type="script" version="1.0.0" />
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <!-- Shared -->
+    <script src="shared/config.lua" type="shared" cache="false" />
+
+    <!-- Server -->
+    <script src="server/main.lua" type="server" />
+
+    <!-- Client -->
+    <script src="client/main.lua" type="client" cache="false" />
+    <script src="client/gui.lua" type="client" cache="false" />
+
+    <!-- Exports -->
+    <export function="revivePlayer" type="server" />
+    <export function="isPlayerInComa" type="server" />
+    <export function="restorePlayerComa" type="server" />
+    <export function="getRemainingDeathTime" type="server" />
+    <export function="isPlayerInComa" type="client" />
+    <export function="getDeathTimeRemaining" type="client" />
+</meta>

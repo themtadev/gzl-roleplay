@@ -1,0 +1,27 @@
+<meta>
+    <info author="Antigravity" type="script" name="gzl_pd" version="1.0.0" description="GZL Roleplay - Polis Departmanı (MDC &amp; Tablet) Sistemi" />
+    <min_mta_version client="1.6.0" server="1.6.0" />
+
+    <!-- Shared Config & Schemas -->
+    <script src="shared/config.lua" type="shared" />
+
+    <!-- Server Storage, Arrest Mechanics & Authorities -->
+    <script src="server/storage.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+    <script src="server/arrest.lua" type="server" />
+
+    <!-- Client UI Engine, Geometry & Views -->
+    <script src="client/ui/geometry.lua" type="client" cache="false" />
+    <script src="client/ui/theme.lua" type="client" cache="false" />
+    <script src="client/ui/components.lua" type="client" cache="false" />
+    <script src="client/ui/views.lua" type="client" cache="false" />
+    <script src="client/render.lua" type="client" cache="false" />
+    <script src="client/main.lua" type="client" cache="false" />
+    <script src="client/arrest.lua" type="client" cache="false" />
+
+    <!-- Exports -->
+    <export function="isPDTabletOpen" type="client" />
+    <export function="isPlayerCuffed" type="shared" />
+    <export function="isPlayerDragged" type="shared" />
+    <export function="isContraband" type="shared" />
+</meta>

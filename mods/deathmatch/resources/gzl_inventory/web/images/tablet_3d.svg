@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 210" width="170" height="210" fill="none">
+    <defs>
+        <radialGradient id="tabHalo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+            <stop offset="60%" stop-color="#ffffff" stop-opacity="0.02"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="tabShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000000" flood-opacity="0.8"/>
+        </filter>
+    </defs>
+    <ellipse cx="85" cy="105" rx="80" ry="90" fill="url(#tabHalo)"/>
+    <g transform="translate(35, 25) rotate(8 50 80)" filter="url(#tabShadow)">
+        <rect x="0" y="0" width="100" height="148" rx="16" fill="#1F2127" stroke="#2D3039" stroke-width="2.5"/>
+        <rect x="7" y="7" width="86" height="134" rx="10" fill="#0B0C0E"/>
+        <rect x="9" y="9" width="82" height="130" rx="8" fill="#F8FAFC"/>
+        <circle cx="50" cy="5" r="1.5" fill="#4B5563"/>
+    </g>
+</svg>

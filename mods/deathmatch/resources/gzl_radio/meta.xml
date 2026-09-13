@@ -1,0 +1,32 @@
+<meta>
+    <info author="GZL Roleplay" version="2.0.0" name="GZL Radio" description="DirectX Walkie-Talkie Radio System" type="script" />
+    <oop>true</oop>
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <script src="config.lua" type="shared" cache="false" />
+    <script src="server/main.lua" type="server" />
+    <script src="client/main.lua" type="client" cache="false" />
+    <export function="openRadio" type="server" />
+    <export function="toggleRadio" type="server" />
+    <export function="toggleRadio" type="client" />
+    <export function="isRadioOpen" type="client" />
+    <export function="getRadioChannel" type="server" />
+    <export function="setPlayerChannel" type="server" />
+    <file src="html/public/telsiz-bg.png" />
+    <file src="html/public/radio.svg" />
+    <file src="html/public/channels-icon.svg" />
+    <file src="html/public/members-icon.svg" />
+    <file src="html/public/green-mic-item.svg" />
+    <file src="html/public/icon-back.svg" />
+    <file src="html/public/icon-back-hover.svg" />
+    <file src="html/public/icon-wifi.svg" />
+    <file src="html/public/icon-star.svg" />
+    <file src="html/public/icon-star-hover.svg" />
+    <file src="html/public/icon-kablo.svg" />
+    <file src="html/public/icon-kablo-hover.svg" />
+    <file src="html/public/kablo-con-channel.svg" />
+    <file src="html/public/star-icon-channel.svg" />
+    <file src="html/public/menu-anten-icon.svg" />
+    <file src="html/public/menu-mic-icon.svg" />
+    <file src="html/public/menu-mic-icon-hov.svg" />
+    <file src="html/public/menu-user-icon.svg" />
+</meta>

@@ -1,0 +1,15 @@
+<meta>
+    <info author="GZL Roleplay" type="script" name="GZL Cinematic Loading Screen" version="1.0.0" description="Interactive local CEF loading screen" />
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+    <download_priority_group>100</download_priority_group>
+    <script src="server.lua" type="server" />
+    <script src="client.lua" type="client" cache="false" />
+    <file src="html/index.html" />
+    <file src="html/style.css" />
+    <file src="html/app.js" />
+    <file src="assets/background.png" />
+    <file src="assets/fonts/SFUIText-Regular.ttf" />
+    <file src="assets/fonts/SFUIText-Medium.ttf" />
+    <file src="assets/fonts/SFUIText-Semibold.ttf" />
+</meta>

@@ -1,0 +1,17 @@
+<meta>
+	<info author="arc_" type="script" version="1.1.1" description="Calculates and displays the quickest road path between two points/nodes on the map."/>
+
+	<script src="util.lua" type="client"/>
+	<script src="MinHeap.lua" type="client"/>
+	<file src="vehiclenodes.lua" />
+	<script src="gps.lua" type="client"/>
+	<script src="client.lua" type="client"/>
+
+	<script src="MinHeap.lua" type="server"/>
+	<script src="gps.lua" type="server"/>
+
+	<export function="calculatePathByCoords" type="client"/>
+	<export function="calculatePathByCoords" type="server"/>
+	<export function="calculatePathByNodeIDs" type="client"/>
+	<export function="calculatePathByNodeIDs" type="server"/>
+</meta>

@@ -1,0 +1,6 @@
+<meta>
+    <script src="psywpC.lua" type="client" cache="false" />
+    <script src="psywpS.lua" type="server" cache="false" />
+    <file src="imgs/weaponswitch.ifp"/>
+    <file src="imgs/weaponswitch2.ifp"/>
+</meta>

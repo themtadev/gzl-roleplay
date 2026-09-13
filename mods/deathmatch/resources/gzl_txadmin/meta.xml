@@ -1,0 +1,14 @@
+﻿<meta>
+    <info author="thommy" type="script" name="GZL txAdmin DX" version="6.0.2" description="txAdmin DX Admin Management System" />
+
+    <script src="shared/config.lua" type="shared" cache="false" />
+    <script src="client/svg.lua" type="client" cache="false" />
+    <script src="client/main.lua" type="client" cache="false" />
+    <script src="server/main.lua" type="server" />
+
+    <export function="toggleTxAdmin" type="client" />
+    <export function="isTxAdminOpen" type="client" />
+    <export function="togglePlayerIDs" type="client" />
+    <export function="toggleNoClip" type="client" />
+    <export function="toggleGodMode" type="client" />
+</meta>

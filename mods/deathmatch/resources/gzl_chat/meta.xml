@@ -1,0 +1,42 @@
+﻿<meta>
+    <info author="GZL Roleplay" type="script" name="GZL Chat" version="1.0.0" />
+
+    <script src="client/cl_chat.lua" type="client" cache="false" />
+
+    <script src="server/utils.lua" type="server" />
+    <script src="server/commands.lua" type="server" />
+    <script src="server/sv_chat.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+
+    <export function="addMessage" type="client" />
+    <export function="addSuggestion" type="client" />
+    <export function="addSuggestions" type="client" />
+    <export function="removeSuggestion" type="client" />
+    <export function="clearChat" type="client" />
+    <export function="openChat" type="client" />
+    <export function="closeChat" type="client" />
+    <export function="setChatVisible" type="client" />
+    <export function="isChatInputOpen" type="client" />
+
+    <export function="addMessage" type="server" />
+    <export function="addSuggestion" type="server" />
+    <export function="clearChat" type="server" />
+
+    <file src="html/index.html" />
+    <file src="html/css/style.css" />
+    <file src="html/js/script.js" />
+    <file src="html/vendor/jquery.min.js" />
+    <file src="html/vendor/emoji.js" />
+    <file src="html/vendor/latofonts.css" />
+
+    <file src="html/img/bell.png" />
+    <file src="html/img/bell-slash.png" />
+    <file src="html/img/emoji.png" />
+
+    <file src="html/vendor/fonts/LatoBold.woff2" />
+    <file src="html/vendor/fonts/LatoBold2.woff2" />
+    <file src="html/vendor/fonts/LatoLight.woff2" />
+    <file src="html/vendor/fonts/LatoLight2.woff2" />
+    <file src="html/vendor/fonts/LatoRegular.woff2" />
+    <file src="html/vendor/fonts/LatoRegular2.woff2" />
+</meta>

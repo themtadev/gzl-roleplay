@@ -1,0 +1,14 @@
+<meta>
+    <info author="thommy" type="script" name="GZL Roleplay - Auth &amp; Account System" version="1.1.0" description="GZL Roleplay Giriş ve Kayıt Sistemi" />
+
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <script src="shared/config.lua" type="shared" />
+    <script src="server/database.lua" type="server" />
+    <script src="server/admin.lua" type="server" />
+    <export function="getAdminLevel" type="server" />
+    <script src="server/account.lua" type="server" />
+    <script src="client/camera.lua" type="client" cache="false" />
+    <script src="client/gui.lua" type="client" cache="false" />
+</meta>

@@ -1,0 +1,50 @@
+<meta>
+    <info author="thommy" type="script" name="GZL Advanced HUD V8" version="8.0.0" />
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+    
+    <script src="server/main.lua" type="server" />
+    <script src="client/gui.lua" type="client" cache="false" />
+    <script src="client/bottom_hud.lua" type="client" cache="false" />
+    
+    <html src="dist/index.html" default="true" />
+    
+    <file src="dist/assets/Consolas-9de4ef7b.ttf" />
+    <file src="dist/assets/DS-DIGIB-db992dcd.TTF" />
+    <file src="dist/assets/Gilroy-Bold_0-ed3a99e5.ttf" />
+    <file src="dist/assets/Gilroy-ExtraBold_0-1cd7d394.ttf" />
+    <file src="dist/assets/Gilroy-Light_0-1179abb1.ttf" />
+    <file src="dist/assets/Gilroy-Medium_0-ce8d455b.ttf" />
+    <file src="dist/assets/Gilroy-Regular_0-8bbb8f0f.ttf" />
+    <file src="dist/assets/Gilroy-SemiBold_0-32eb47df.ttf" />
+    <file src="dist/assets/PilatExtended-Bold-fcd40ea2.ttf" />
+    <file src="dist/assets/PilatExtended-Regular-d41028b3.ttf" />
+    <file src="dist/assets/TTNorms-Medium-d5c01f5a.otf" />
+    <file src="dist/assets/hemihead-b10b5a24.ttf" />
+    <file src="dist/assets/back-5bc56bbd.png" />
+    <file src="dist/assets/back1-9d4816fa.png" />
+    <file src="dist/assets/back2-8407b7dd.png" />
+    <file src="dist/assets/back4-afb3fbf5.png" />
+    <file src="dist/assets/back9-9533a44a.png" />
+    <file src="dist/assets/backboat-9cc58e22.png" />
+    <file src="dist/assets/boat-f576b448.png" />
+    <file src="dist/assets/car-fb9844e5.png" />
+    <file src="dist/assets/carControl-6964df67.png" />
+    <file src="dist/assets/index-5d76fe73.css" />
+    <file src="dist/assets/index-8a57dc80.js" />
+    <file src="dist/assets/index-91580884.js" />
+    <file src="dist/assets/izzy-ec39a4ee.png" />
+    <file src="dist/assets/musicbanner-925f4495.png" />
+    <file src="dist/assets/voice-mic-mask-4b949139.svg" />
+    <file src="dist/assets/weapon-c0b46e27.png" />
+    <file src="dist/index.html" />
+    
+    <export function="setHUDVisible" type="client" />
+    <export function="isHUDVisible" type="client" />
+    <export function="setVoiceRange" type="client" />
+    <export function="getTopBarHeight" type="client" />
+    <export function="setBottomHUDVisible" type="client" />
+    <export function="isBottomHUDVisible" type="client" />
+    <export function="toggleSettings" type="client" />
+    <export function="toggleHudSettings" type="client" />
+</meta>

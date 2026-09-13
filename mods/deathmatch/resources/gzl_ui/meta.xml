@@ -1,0 +1,57 @@
+<meta>
+    <info author="thommy" type="script" name="GZL Roleplay - UI Framework" version="1.0.0" description="GZL Liquid Glass UI Library" />
+
+    <file src="assets/fonts/SFUIText-Regular.ttf" />
+    <file src="assets/fonts/SFUIText-RegularItalic.ttf" />
+    <file src="assets/fonts/SFUIText-Medium.ttf" />
+    <file src="assets/fonts/SFUIText-MediumItalic.ttf" />
+    <file src="assets/fonts/SFUIText-Semibold.ttf" />
+    <file src="assets/fonts/SFUIText-SemiboldItalic.ttf" />
+    <file src="assets/fonts/SFUIText-Bold.ttf" />
+    <file src="assets/fonts/SFUIText-BoldItalic.ttf" />
+    <file src="assets/fonts/SFUIText-Heavy.ttf" />
+    <file src="assets/fonts/SFUIText-HeavyItalic.ttf" />
+    <file src="assets/fonts/SFUIText-Light.ttf" />
+    <file src="assets/fonts/SFUIText-LightItalic.ttf" />
+
+    <script src="client/fonts.lua" type="client" cache="false" />
+    <script src="client/svg.lua" type="client" cache="false" />
+    <script src="client/components.lua" type="client" cache="false" />
+    <script src="client/progressbar.lua" type="client" cache="false" />
+    <script src="server/main.lua" type="server" />
+
+    <export function="getFont" type="client" />
+    <export function="drawCircle" type="client" />
+    <export function="drawRoundedRectangle" type="client" />
+    <export function="drawRoundedBorder" type="client" />
+    <export function="drawGlassPanel" type="client" />
+    <export function="drawTabPillSVG" type="client" />
+    <export function="drawDiagonalTabBarSVG" type="client" />
+    <export function="drawNotificationCardSVG" type="client" />
+    <export function="drawIconSVG" type="client" />
+    <export function="drawGlassButton" type="client" />
+    <export function="drawGlassEditBox" type="client" />
+    <export function="setActiveEditBox" type="client" />
+    <export function="getActiveEditBox" type="client" />
+    <export function="isPlayerTyping" type="client" />
+    <export function="getEditBoxText" type="client" />
+    <export function="setEditBoxText" type="client" />
+    <export function="isMouseInPosition" type="client" />
+    <export function="showToast" type="client" />
+    <export function="showNotification" type="client" />
+    <export function="drawLiquidButtonSVG" type="client" />
+    <export function="drawEditBoxSVG" type="client" />
+    <export function="getAnimProgress" type="client" />
+    <export function="resetAnimProgress" type="client" />
+    <export function="getScreenScale" type="client" />
+    <export function="startProgressBar" type="client" />
+    <export function="cancelProgressBar" type="client" />
+    <export function="isProgressBarActive" type="client" />
+    <export function="getProgressBarData" type="client" />
+
+    <!-- Server Exports -->
+    <export function="showNotification" type="server" />
+    <export function="showToast" type="server" />
+    <export function="startProgressBar" type="server" />
+    <export function="cancelProgressBar" type="server" />
+</meta>

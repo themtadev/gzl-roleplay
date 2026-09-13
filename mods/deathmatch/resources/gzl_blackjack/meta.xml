@@ -1,0 +1,126 @@
+<meta>
+    <info author="GZL Roleplay" type="script" name="GZL Diamond Blackjack" version="1.0.0" description="Gelişmiş Diamond Casino Blackjack Sistemi" />
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <!-- Script Dosyaları -->
+    <script src="shared/config.lua" type="shared" cache="false" />
+    <script src="shared/cards.lua" type="shared" cache="false" />
+    <script src="server/transactions.lua" type="server" />
+    <script src="server/game.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+    <script src="client/fonts.lua" type="client" cache="false" />
+    <script src="client/sound.lua" type="client" cache="false" />
+    <script src="client/main.lua" type="client" cache="false" />
+    <script src="client/interaction.lua" type="client" cache="false" />
+    <script src="client/ui.lua" type="client" cache="false" />
+
+    <!-- Export Fonksiyonları -->
+    <export function="isPlayerAtBlackjackTable" type="server" />
+    <export function="getPlayerTableData" type="server" />
+
+    <!-- Shader Dosyaları -->
+    <file src="assets/shaders/table_tint.fx" />
+    <file src="assets/shaders/dealer_fix.fx" />
+
+    <!-- Yazı Tipleri -->
+    <file src="assets/fonts/SFUIText-Regular.ttf" />
+    <file src="assets/fonts/SFUIText-Medium.ttf" />
+    <file src="assets/fonts/SFUIText-Semibold.ttf" />
+    <file src="assets/fonts/SFUIText-Bold.ttf" />
+    <file src="assets/fonts/SFUIText-Heavy.ttf" />
+
+    <!-- 3D Modeller -->
+    <file src="assets/models/blackjack_table.col" />
+    <file src="assets/models/blackjack_table.dff" />
+    <file src="assets/models/blackjack_table.txd" />
+    <file src="assets/models/dealer.dff" />
+    <file src="assets/models/dealer.txd" />
+
+    <!-- Ses Dosyaları -->
+    <file src="assets/sounds/blackjack.wav" />
+    <file src="assets/sounds/card_deal.wav" />
+    <file src="assets/sounds/card_slide.wav" />
+    <file src="assets/sounds/chip_collect.wav" />
+    <file src="assets/sounds/chip_place.wav" />
+    <file src="assets/sounds/dealer_16.wav" />
+    <file src="assets/sounds/dealer_17.wav" />
+    <file src="assets/sounds/dealer_18.wav" />
+    <file src="assets/sounds/dealer_19.wav" />
+    <file src="assets/sounds/dealer_20.wav" />
+    <file src="assets/sounds/dealer_21.wav" />
+    <file src="assets/sounds/dealer_another_card.wav" />
+    <file src="assets/sounds/dealer_blackjack.wav" />
+    <file src="assets/sounds/dealer_busts.wav" />
+    <file src="assets/sounds/dealer_closed_bets.wav" />
+    <file src="assets/sounds/dealer_greet.wav" />
+    <file src="assets/sounds/dealer_place_bets.wav" />
+    <file src="assets/sounds/dealer_player_bust.wav" />
+    <file src="assets/sounds/dealer_wins.wav" />
+    <file src="assets/sounds/lose.wav" />
+    <file src="assets/sounds/shuffle.wav" />
+    <file src="assets/sounds/win.wav" />
+
+    <!-- Fiş Grafikleri -->
+    <file src="assets/chips/chip_10.png" />
+    <file src="assets/chips/chip_100.png" />
+    <file src="assets/chips/chip_1000.png" />
+    <file src="assets/chips/chip_50.png" />
+    <file src="assets/chips/chip_500.png" />
+    <file src="assets/chips/chip_5000.png" />
+
+    <!-- Oyun Kartları -->
+    <file src="assets/cards/card_back.png" />
+    <file src="assets/cards/card_C_10.png" />
+    <file src="assets/cards/card_C_2.png" />
+    <file src="assets/cards/card_C_3.png" />
+    <file src="assets/cards/card_C_4.png" />
+    <file src="assets/cards/card_C_5.png" />
+    <file src="assets/cards/card_C_6.png" />
+    <file src="assets/cards/card_C_7.png" />
+    <file src="assets/cards/card_C_8.png" />
+    <file src="assets/cards/card_C_9.png" />
+    <file src="assets/cards/card_C_A.png" />
+    <file src="assets/cards/card_C_J.png" />
+    <file src="assets/cards/card_C_K.png" />
+    <file src="assets/cards/card_C_Q.png" />
+    <file src="assets/cards/card_D_10.png" />
+    <file src="assets/cards/card_D_2.png" />
+    <file src="assets/cards/card_D_3.png" />
+    <file src="assets/cards/card_D_4.png" />
+    <file src="assets/cards/card_D_5.png" />
+    <file src="assets/cards/card_D_6.png" />
+    <file src="assets/cards/card_D_7.png" />
+    <file src="assets/cards/card_D_8.png" />
+    <file src="assets/cards/card_D_9.png" />
+    <file src="assets/cards/card_D_A.png" />
+    <file src="assets/cards/card_D_J.png" />
+    <file src="assets/cards/card_D_K.png" />
+    <file src="assets/cards/card_D_Q.png" />
+    <file src="assets/cards/card_H_10.png" />
+    <file src="assets/cards/card_H_2.png" />
+    <file src="assets/cards/card_H_3.png" />
+    <file src="assets/cards/card_H_4.png" />
+    <file src="assets/cards/card_H_5.png" />
+    <file src="assets/cards/card_H_6.png" />
+    <file src="assets/cards/card_H_7.png" />
+    <file src="assets/cards/card_H_8.png" />
+    <file src="assets/cards/card_H_9.png" />
+    <file src="assets/cards/card_H_A.png" />
+    <file src="assets/cards/card_H_J.png" />
+    <file src="assets/cards/card_H_K.png" />
+    <file src="assets/cards/card_H_Q.png" />
+    <file src="assets/cards/card_S_10.png" />
+    <file src="assets/cards/card_S_2.png" />
+    <file src="assets/cards/card_S_3.png" />
+    <file src="assets/cards/card_S_4.png" />
+    <file src="assets/cards/card_S_5.png" />
+    <file src="assets/cards/card_S_6.png" />
+    <file src="assets/cards/card_S_7.png" />
+    <file src="assets/cards/card_S_8.png" />
+    <file src="assets/cards/card_S_9.png" />
+    <file src="assets/cards/card_S_A.png" />
+    <file src="assets/cards/card_S_J.png" />
+    <file src="assets/cards/card_S_K.png" />
+    <file src="assets/cards/card_S_Q.png" />
+</meta>

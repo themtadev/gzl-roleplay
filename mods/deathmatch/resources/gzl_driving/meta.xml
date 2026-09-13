@@ -1,0 +1,21 @@
+<meta>
+    <info author="GZL Roleplay" type="script" name="gzl_driving" version="1.0.0" description="FiveM Driving Experience &amp; Dynamic Camera System" />
+
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <!-- Client Scripts -->
+    <script src="client/camera.lua" type="client" cache="false" />
+    <script src="client/aircontrol.lua" type="client" cache="false" />
+    <script src="client/physics.lua" type="client" cache="false" />
+
+    <!-- Server Scripts -->
+    <script src="server/main.lua" type="server" />
+
+    <!-- Exports -->
+    <export function="toggleFiveMCamera" type="client" />
+    <export function="isFiveMCameraActive" type="client" />
+    <export function="setFiveMCameraActive" type="client" />
+    <export function="applyFiveMPhysics" type="server" />
+    <export function="restoreVehiclePhysics" type="server" />
+</meta>

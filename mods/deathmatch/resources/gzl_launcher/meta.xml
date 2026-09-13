@@ -1,0 +1,31 @@
+<meta>
+    <info author="GZL Roleplay" type="script" name="GZL Launcher &amp; Boot Manager" version="1.0.0" description="GZL Roleplay Phased Resource Sequencer &amp; Boot Manager" />
+    
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <!-- Shared Configuration -->
+    <script src="shared/config.lua" type="shared" cache="false" />
+
+    <!-- Server Engine Scripts -->
+    <script src="server/acl_check.lua" type="server" />
+    <script src="server/exports.lua" type="server" />
+    <script src="server/main.lua" type="server" />
+
+    <!-- Public Server Exports -->
+    <export function="startAllResources" type="server" />
+    <export function="stopAllResources" type="server" />
+    <export function="restartAllResources" type="server" />
+    <export function="isResourceLoaded" type="server" />
+    <export function="getLauncherStatus" type="server" />
+    <export function="getResourceQueue" type="server" />
+    <export function="reloadLauncherConfig" type="server" />
+
+    <!-- ACL Function Permissions Required -->
+    <aclrequest>
+        <right name="function.startResource" access="true" />
+        <right name="function.stopResource" access="true" />
+        <right name="function.restartResource" access="true" />
+        <right name="function.refreshResources" access="true" />
+    </aclrequest>
+</meta>

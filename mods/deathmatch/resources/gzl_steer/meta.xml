@@ -1,0 +1,8 @@
+<meta>
+    <info author="GZL Roleplay" type="script" name="gzl_steer" version="1.0.0" description="Dynamic Steering Wheel Rotation System" />
+
+    <script src="client/main.lua" type="client" cache="false" />
+
+    <export function="getVehicleSteeringComponent" type="client" />
+    <export function="setVehicleSteeringAxis" type="client" />
+</meta>

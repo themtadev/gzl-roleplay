@@ -1,0 +1,111 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="app-icon">
+
+    <!-- ===== DEFINITIONS ===== -->
+    <defs>
+        <!-- DARK: dark bg gradient -->
+        <linearGradient id="streaming-bgGradientDark" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#525755"/>
+            <stop offset="0.52" stop-color="#232625"/>
+            <stop offset="1" stop-color="#181A19"/>
+        </linearGradient>
+        <!-- DARK: red icon gradients -->
+        <linearGradient id="streaming-iconGradientDark-1" x1="38.6194" y1="40.5718" x2="38.6194" y2="59.4279" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#E5413F"/>
+            <stop offset="1" stop-color="#C70021"/>
+        </linearGradient>
+        <linearGradient id="streaming-iconGradientDark-2" x1="29.5147" y1="33.0288" x2="29.5147" y2="66.97" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#E5413F"/>
+            <stop offset="1" stop-color="#C70021"/>
+        </linearGradient>
+        <linearGradient id="streaming-iconGradientDark-3" x1="61.3806" y1="40.4771" x2="61.3806" y2="59.3332" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#E5413F"/>
+            <stop offset="1" stop-color="#C70021"/>
+        </linearGradient>
+        <linearGradient id="streaming-iconGradientDark-4" x1="70.4854" y1="32.8584" x2="70.4854" y2="66.7995" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#E5413F"/>
+            <stop offset="1" stop-color="#C70021"/>
+        </linearGradient>
+        <linearGradient id="streaming-iconGradientDark-5" x1="49.9999" y1="47.3335" x2="49.9999" y2="52.6668" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#E5413F"/>
+            <stop offset="1" stop-color="#C70021"/>
+        </linearGradient>
+
+        <!-- DEFAULT: red bg gradient -->
+        <linearGradient id="streaming-bgGradient" x1="50.5432" y1="99" x2="50.4577" y2="0.999992" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#E5413F" stop-opacity="0.9"/>
+            <stop offset="1" stop-color="#C70021"/>
+        </linearGradient>
+        <!-- DEFAULT: white icon gradients -->
+        <linearGradient id="streaming-iconGradientDefault-1" x1="38.6194" y1="40.7134" x2="38.6194" y2="59.5695" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/>
+            <stop offset="1" stop-color="#E5E5E5"/>
+        </linearGradient>
+        <linearGradient id="streaming-iconGradientDefault-2" x1="29.5147" y1="33.1704" x2="29.5147" y2="67.1116" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/>
+            <stop offset="1" stop-color="#E5E5E5"/>
+        </linearGradient>
+        <linearGradient id="streaming-iconGradientDefault-3" x1="61.3806" y1="40.6187" x2="61.3806" y2="59.4748" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/>
+            <stop offset="1" stop-color="#E5E5E5"/>
+        </linearGradient>
+        <linearGradient id="streaming-iconGradientDefault-4" x1="70.4854" y1="33" x2="70.4854" y2="66.9411" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/>
+            <stop offset="1" stop-color="#E5E5E5"/>
+        </linearGradient>
+        <linearGradient id="streaming-iconGradientDefault-5" x1="49.9999" y1="47.4751" x2="49.9999" y2="52.8084" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/>
+            <stop offset="1" stop-color="#E5E5E5"/>
+        </linearGradient>
+
+        <!-- Shared clip path -->
+        <clipPath id="streaming-clip">
+            <rect width="64" height="64" fill="white" transform="translate(18 18)"/>
+        </clipPath>
+    </defs>
+
+    <!-- ================= DARK ================= -->
+    <g class="icon-dark" style="display: none;">
+        <!-- Dark gradient background -->
+        <rect width="100" height="100" fill="url(#streaming-bgGradientDark)"/>
+
+        <!-- Red gradient icon -->
+        <g clip-path="url(#streaming-clip)">
+            <path d="M40.572 59.4279C35.365 54.221 35.365 45.7788 40.572 40.5718" stroke="url(#streaming-iconGradientDark-1)" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M33.0294 66.97C23.6569 57.5972 23.6569 42.4014 33.0294 33.0288" stroke="url(#streaming-iconGradientDark-2)" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M59.428 40.4771C64.6349 45.6842 64.6349 54.1263 59.428 59.3332" stroke="url(#streaming-iconGradientDark-3)" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M66.9707 32.8584C76.3432 42.231 76.3432 57.427 66.9707 66.7995" stroke="url(#streaming-iconGradientDark-4)" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M49.9999 52.6668C51.4727 52.6668 52.6666 51.4729 52.6666 50.0002C52.6666 48.5274 51.4727 47.3335 49.9999 47.3335C48.5272 47.3335 47.3333 48.5274 47.3333 50.0002C47.3333 51.4729 48.5272 52.6668 49.9999 52.6668Z" stroke="url(#streaming-iconGradientDark-5)" stroke-width="5.33333" stroke-linecap="round"/>
+        </g>
+    </g>
+
+    <!-- ================= TINTED ================= -->
+    <g class="icon-tinted" style="display: none;">
+        <!-- Solid background (theme controlled) -->
+        <rect width="100" height="100" fill="var(--icon-bg, #D9D9D9)"/>
+
+        <!-- Tintable icon -->
+        <g clip-path="url(#streaming-clip)">
+            <path d="M40.572 59.4279C35.365 54.221 35.365 45.7788 40.572 40.5718" stroke="currentColor" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M33.0294 66.97C23.6569 57.5972 23.6569 42.4014 33.0294 33.0288" stroke="currentColor" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M59.428 40.4771C64.6349 45.6842 64.6349 54.1263 59.428 59.3332" stroke="currentColor" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M66.9707 32.8584C76.3432 42.231 76.3432 57.427 66.9707 66.7995" stroke="currentColor" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M49.9999 52.6668C51.4727 52.6668 52.6666 51.4729 52.6666 50.0002C52.6666 48.5274 51.4727 47.3335 49.9999 47.3335C48.5272 47.3335 47.3333 48.5274 47.3333 50.0002C47.3333 51.4729 48.5272 52.6668 49.9999 52.6668Z" stroke="currentColor" stroke-width="5.33333" stroke-linecap="round"/>
+        </g>
+    </g>
+
+    <!-- ================= DEFAULT ================= -->
+    <g class="icon-default" style="display: block;">
+        <!-- Red gradient background -->
+        <rect width="100" height="100" fill="url(#streaming-bgGradient)"/>
+
+        <!-- White icon -->
+        <g clip-path="url(#streaming-clip)">
+            <path d="M40.572 59.5695C35.365 54.3626 35.365 45.9204 40.572 40.7134" stroke="url(#streaming-iconGradientDefault-1)" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M33.0294 67.1116C23.6569 57.7388 23.6569 42.543 33.0294 33.1704" stroke="url(#streaming-iconGradientDefault-2)" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M59.428 40.6187C64.6349 45.8258 64.6349 54.2679 59.428 59.4748" stroke="url(#streaming-iconGradientDefault-3)" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M66.9707 33C76.3432 42.3726 76.3432 57.5686 66.9707 66.9411" stroke="url(#streaming-iconGradientDefault-4)" stroke-width="5.33333" stroke-linecap="round"/>
+            <path d="M49.9999 52.8084C51.4727 52.8084 52.6666 51.6145 52.6666 50.1418C52.6666 48.669 51.4727 47.4751 49.9999 47.4751C48.5272 47.4751 47.3333 48.669 47.3333 50.1418C47.3333 51.6145 48.5272 52.8084 49.9999 52.8084Z" stroke="url(#streaming-iconGradientDefault-5)" stroke-width="5.33333" stroke-linecap="round"/>
+        </g>
+    </g>
+
+</svg>

@@ -1,0 +1,102 @@
+<meta>
+    <info author="GZL Roleplay" name="Benny's Original Motor Works" version="1.0.0" type="script" description="Benny's Custom Garage and Advanced Mechanic System" />
+
+    <min_mta_version client="1.6.0" server="1.6.0" />
+    <oop>true</oop>
+
+    <!-- Shared Scripts -->
+    <script src="shared/config.lua" type="shared" cache="false" />
+    <script src="shared/map_data.lua" type="shared" cache="false" />
+
+    <!-- Client Scripts -->
+    <script src="client/map.lua" type="client" cache="false" />
+    <script src="client/lift.lua" type="client" cache="false" />
+    <script src="client/neon.lua" type="client" cache="false" />
+    <script src="client/fonts.lua" type="client" cache="false" />
+    <script src="client/mechanic.lua" type="client" cache="false" />
+    <script src="client/ui.lua" type="client" cache="false" />
+
+    <!-- Server Scripts -->
+    <script src="server/main.lua" type="server" />
+    <script src="server/npc.lua" type="server" />
+
+    <!-- Custom SF UI Fonts -->
+    <file src="assets/fonts/SFUIText-Regular.ttf" />
+    <file src="assets/fonts/SFUIText-Medium.ttf" />
+    <file src="assets/fonts/SFUIText-Semibold.ttf" />
+    <file src="assets/fonts/SFUIText-Bold.ttf" />
+    <file src="assets/fonts/SFUIText-Heavy.ttf" />
+
+    <!-- FiveM Benny's UI Assets & Sounds -->
+    <file src="assets/images/logo.png" />
+    <file src="assets/sounds/wrench.ogg" />
+    <file src="assets/sounds/respray.ogg" />
+    <file src="assets/sounds/impact_wrench.wav" />
+    <file src="assets/sounds/lift_hum.wav" />
+    <file src="assets/sounds/metal_hammer.wav" />
+    <file src="assets/sounds/spray.wav" />
+
+    <!-- Models, Collisions & Textures -->
+    <file src="models/bennys.txd" />
+    <file src="models/bennys2.txd" />
+    <file src="models/bext.col" />
+    <file src="models/bext.dff" />
+    <file src="models/bprops.col" />
+    <file src="models/bprops.dff" />
+    <file src="models/bprt2.col" />
+    <file src="models/bprt2.dff" />
+    <file src="models/bshell.col" />
+    <file src="models/bshell.dff" />
+    <file src="models/bshit.col" />
+    <file src="models/bshit.dff" />
+    <file src="models/bvehic.col" />
+    <file src="models/bvehic.dff" />
+    <file src="models/framewov.col" />
+    <file src="models/framewov.dff" />
+    <file src="models/lamps_von.col" />
+    <file src="models/lamps_von.dff" />
+    <file src="models/llframe.col" />
+    <file src="models/llframe.dff" />
+    <file src="models/lr_banners1.col" />
+    <file src="models/lr_banners1.dff" />
+    <file src="models/lr_banners2.col" />
+    <file src="models/lr_banners2.dff" />
+    <file src="models/lr_banners3.col" />
+    <file src="models/lr_banners3.dff" />
+    <file src="models/lr_banners4.col" />
+    <file src="models/lr_banners4.dff" />
+    <file src="models/lr_carlift.col" />
+    <file src="models/lr_carlift.dff" />
+    <file src="models/lr_grafitib.col" />
+    <file src="models/lr_grafitib.dff" />
+    <file src="models/lr_grafside.col" />
+    <file src="models/lr_grafside.dff" />
+    <file src="models/lr_mezzanin.col" />
+    <file src="models/lr_mezzanin.dff" />
+    <file src="models/lr_montageb.col" />
+    <file src="models/lr_montageb.dff" />
+    <file src="models/lr_montx.col" />
+    <file src="models/lr_montx.dff" />
+    <file src="models/lr_office.col" />
+    <file src="models/lr_office.dff" />
+    <file src="models/lr_pillars.col" />
+    <file src="models/lr_pillars.dff" />
+    <file src="models/lr_racksb.col" />
+    <file src="models/lr_racksb.dff" />
+    <file src="models/lr_rail1.col" />
+    <file src="models/lr_rail1.dff" />
+    <file src="models/lr_rail2.col" />
+    <file src="models/lr_rail2.dff" />
+    <file src="models/lr_ramps.col" />
+    <file src="models/lr_ramps.dff" />
+    <file src="models/lr_ramps_s.col" />
+    <file src="models/lr_ramps_s.dff" />
+    <file src="models/lr_spray.col" />
+    <file src="models/lr_spray.dff" />
+    <file src="models/v_doorbenny.col" />
+    <file src="models/v_doorbenny.dff" />
+
+    <!-- Exports -->
+    <export function="openMechanicMenu" type="client" />
+    <export function="isMechanicMenuOpen" type="client" />
+</meta>

@@ -1,0 +1,9 @@
+<meta>
+	<script src="server.lua" type="server" />
+	<script src="client.lua" type="client" cache="false" />
+	<script src="probe.lua" type="client" cache="false" />
+	<script src="ram.lua" type="client" cache="false" />
+	<script src="fps.lua" type="client" cache="false" />
+	<file src="assets/Regular.ttf" />
+	<file src="assets/Semibold.ttf" />
+</meta>

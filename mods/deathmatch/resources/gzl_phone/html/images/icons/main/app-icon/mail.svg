@@ -1,0 +1,49 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="app-icon">
+
+            <!-- ===== DEFINITIONS ===== -->
+            <defs>
+                <linearGradient id="mail-bgGradientDark" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#525755"/>
+                    <stop offset="0.52" stop-color="#232625"/>
+                    <stop offset="1" stop-color="#181A19"/>
+                </linearGradient>
+                <linearGradient id="mail-iconGradient" x1="49.5262" y1="32" x2="49.5262" y2="67.5868" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#3DE7CC"/>
+                    <stop offset="1" stop-color="#3FA5F8"/>
+                </linearGradient>
+                <linearGradient id="mail-bgGradient" x1="48" y1="0" x2="48" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#3CE9CD"/>
+                    <stop offset="1" stop-color="#40A2F9"/>
+                </linearGradient>
+            </defs>
+
+            <!-- ================= DARK ================= -->
+            <g class="icon-dark" style="display: none;">
+                <!-- Dark gradient background -->
+                <rect width="100" height="100" fill="url(#mail-bgGradientDark)" />
+
+                <!-- Cyan-blue gradient icon -->
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M24.0659 32H74.9284L50.1595 53.3345C49.8802 53.5507 49.2665 53.6038 48.9249 53.3558L24.0659 32Z" fill="url(#mail-iconGradient)"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M21 36.0014V67.5868H78.0524V36.0014L55.275 55.7137C53.9922 57.0489 52.506 58.0567 50.8086 58.5634H48.7278C47.2665 58.4507 45.9185 57.7335 43.7902 55.7137L21 36.0014Z" fill="url(#mail-iconGradient)"/>
+            </g>
+
+            <!-- ================= TINTED ================= -->
+            <g class="icon-tinted" style="display: none;">
+                <!-- Solid background (theme controlled) -->
+                <rect width="100" height="100" fill="var(--icon-bg, #D9D9D9)" />
+
+                <!-- Tintable icon -->
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M24.0659 32H74.9284L50.1595 53.3345C49.8802 53.5507 49.2665 53.6038 48.9249 53.3558L24.0659 32Z M21 36.0014V67.5868H78.0524V36.0014L55.275 55.7137C53.9922 57.0489 52.506 58.0567 50.8086 58.5634H48.7278C47.2665 58.4507 45.9185 57.7335 43.7902 55.7137L21 36.0014Z" fill="currentColor"/>
+            </g>
+
+            <!-- ================= DEFAULT ================= -->
+            <g class="icon-default" style="display: block;">
+                <!-- Cyan-blue gradient background -->
+                <rect width="100" height="100" fill="url(#mail-bgGradient)" />
+
+                <!-- White icon -->
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M24.0659 32H74.9284L50.1595 53.3345C49.8802 53.5507 49.2665 53.6038 48.9249 53.3558L24.0659 32Z" fill="white"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M21 36.0014V67.5868H78.0524V36.0014L55.275 55.7137C53.9922 57.0489 52.506 58.0567 50.8086 58.5634H48.7278C47.2665 58.4507 45.9185 57.7335 43.7902 55.7137L21 36.0014Z" fill="white"/>
+            </g>
+
+        </svg>
