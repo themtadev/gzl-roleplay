@@ -32,10 +32,10 @@ XAMPP, MySQL veya Navicat kurmaya kalkmayın, altyapı tamamen SQLite. Çift tı
 ### Kurulum ve Yetki
 
 1. MTA Server64.exe dosyasını çalıştırın.
-2. Oyuna bağlanıp bir hesap oluşturun.
-3. Sunucu konsoluna şu komutu yazarak kendinize direkt Seviye 10 Kurucu yetkisi verin:
-`cmd
-accountadmin KullaniciAdiniz 10
-`
+2. Sunucu konsoluna şu komutu yazarak direkt Seviye 10 Kurucu yetkisi verin:
+```cmd
+setadmin thommy 10
+```
+*(Oyuncu ID, nick veya hesap adıyla verilebilir. Seviye 8+ adminler oyun içinden de `/setadmin` kullanabilir.)*
 
 Geliştirici: thommy

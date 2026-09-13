@@ -18,10 +18,9 @@ XAMPP, MySQL veya Navicat kurmaya kalkmayin, altyapi tamamen SQLite. Cift tikla 
 
 3. ADMINLIK ALMA
 1. MTA Server64.exe dosyasini calistirin.
-2. Oyuna girip hesap acin.
-3. Sunucu konsoluna su komutu yazin:
-   accountadmin KullaniciAdiniz 10
-Bu komut direkt Kurucu (Seviye 10) yetkisi verir. Oyunda Page Up tusuna basarak txAdmin'i acabilirsiniz.
+2. Sunucu konsoluna su komutu yazin:
+   setadmin OyuncuNickVeyaID 10
+Bu komut direkt Kurucu (Seviye 10) yetkisi verir. Oyun icinden Page Up tusuna basarak txAdmin panelini acabilirsiniz. Seviye 8+ adminler oyun icinden de /setadmin kullanabilir.
 
 4. TUSLAR
 - F1: Telefon (/telefon)
