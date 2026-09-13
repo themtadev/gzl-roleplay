@@ -1,0 +1,112 @@
+/* GZL Phone - FontAwesome Offline Local Icon Fix */
+@font-face {
+    font-family: "font awesome 5 pro";
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url(../webfonts/fa-solid-900.woff2) format("woff2"),
+         url(../webfonts/fa-solid-900.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "font awesome 5 pro";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(../webfonts/fa-regular-400.woff2) format("woff2"),
+         url(../webfonts/fa-regular-400.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "font awesome 5 pro";
+    font-style: normal;
+    font-weight: 300;
+    font-display: block;
+    src: url(../webfonts/fa-regular-400.woff2) format("woff2"),
+         url(../webfonts/fa-regular-400.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "font awesome 5 brands";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(../webfonts/fa-brands-400.woff2) format("woff2"),
+         url(../webfonts/fa-brands-400.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "font awesome 5 duotone";
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url(../webfonts/fa-solid-900.woff2) format("woff2"),
+         url(../webfonts/fa-solid-900.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Font Awesome 6 Free";
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url(../webfonts/fa-solid-900.woff2) format("woff2"),
+         url(../webfonts/fa-solid-900.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Font Awesome 6 Free";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(../webfonts/fa-regular-400.woff2) format("woff2"),
+         url(../webfonts/fa-regular-400.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Font Awesome 6 Brands";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(../webfonts/fa-brands-400.woff2) format("woff2"),
+         url(../webfonts/fa-brands-400.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "FontAwesome";
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url(../webfonts/fa-solid-900.woff2) format("woff2"),
+         url(../webfonts/fa-solid-900.ttf) format("truetype");
+}
+
+/* Enforce local font-family and weights for icon classes */
+.fa, .fas, .fa-solid {
+    font-family: "Font Awesome 6 Free", "font awesome 5 pro", "FontAwesome" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+}
+
+.far, .fa-regular {
+    font-family: "Font Awesome 6 Free", "font awesome 5 pro", "FontAwesome" !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+}
+
+.fab, .fa-brands {
+    font-family: "Font Awesome 6 Brands", "font awesome 5 brands", "FontAwesome" !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+}
+
+.fal, .fa-light {
+    font-family: "Font Awesome 6 Free", "font awesome 5 pro", "FontAwesome" !important;
+    font-weight: 300 !important;
+    font-style: normal !important;
+}
+
+.fad, .fa-duotone {
+    font-family: "Font Awesome 6 Free", "font awesome 5 pro", "FontAwesome" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+}
