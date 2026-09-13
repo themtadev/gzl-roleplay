@@ -75,7 +75,8 @@ local function findTargetPlayer(query)
 end
 
 local function handleSetAdminCommand(actor, _, targetQuery, levelInput)
-    if isElement(actor) then
+    local isPlayerCaller = isElement(actor) and getElementType(actor) == "player"
+    if isPlayerCaller then
         local actorLevel = getAdminLevel(actor)
         if actorLevel < 8 then
             outputChatBox("#ef4444[GZL-ADMIN]#ffffff Bu komutu kullanmak için yetkiniz bulunmamaktadır!", actor, 255, 255, 255, true)
@@ -86,7 +87,7 @@ local function handleSetAdminCommand(actor, _, targetQuery, levelInput)
     local level = tonumber(levelInput)
     if not targetQuery or not level or level ~= math.floor(level) or level < 0 or level > 10 then
         local usageMsg = "Kullanim: setadmin <oyuncu_id / oyuncu_nick / hesap_adi> <0-10>"
-        if isElement(actor) then
+        if isPlayerCaller then
             outputChatBox("#38bdf8[GZL-ADMIN]#ffffff " .. usageMsg, actor, 255, 255, 255, true)
         else
             outputServerLog("[GZL-ADMIN] " .. usageMsg)
@@ -101,7 +102,8 @@ local function handleSetAdminCommand(actor, _, targetQuery, levelInput)
         local pName = getPlayerName(onlineTarget)
         sessions[onlineTarget] = sessions[onlineTarget] or { username = pName }
         sessions[onlineTarget].level = level
-        setElementData(onlineTarget, "account:admin", level, "broadcast", "deny")
+        setElementData(onlineTarget, "account:admin", level, true)
+        setElementData(onlineTarget, "admin_level", level, true)
 
         local accId = getElementData(onlineTarget, "account:id")
         if accId and db then
@@ -109,7 +111,7 @@ local function handleSetAdminCommand(actor, _, targetQuery, levelInput)
         end
 
         local successMsg = string.format("'%s' adli online oyuncuya Seviye %d admin yetkisi verildi.", pName, level)
-        if isElement(actor) then
+        if isPlayerCaller then
             outputChatBox("#00f5a0[GZL-ADMIN]#ffffff " .. successMsg, actor, 255, 255, 255, true)
         else
             outputServerLog("[GZL-ADMIN] BASARILI: " .. successMsg)
@@ -120,7 +122,7 @@ local function handleSetAdminCommand(actor, _, targetQuery, levelInput)
 
     if not db then
         local dbErr = "HATA: Veritabani baglantisi aktif degil!"
-        if isElement(actor) then
+        if isPlayerCaller then
             outputChatBox("#ef4444[GZL-ADMIN]#ffffff " .. dbErr, actor, 255, 255, 255, true)
         else
             outputServerLog("[GZL-ADMIN] " .. dbErr)
@@ -132,7 +134,7 @@ local function handleSetAdminCommand(actor, _, targetQuery, levelInput)
         local rows = dbPoll(handle, 0)
         if not rows or #rows ~= 1 then
             local notFound = string.format("'%s' adinda ne online oyuncu ne de kayitli hesap bulunamadi! Oyuncu oyundaysa nick/id yazin veya kayit olmasini bekleyin.", tostring(targetQuery))
-            if isElement(actor) then
+            if isPlayerCaller then
                 outputChatBox("#ef4444[GZL-ADMIN]#ffffff " .. notFound, actor, 255, 255, 255, true)
             else
                 outputServerLog("[GZL-ADMIN] " .. notFound)
@@ -143,7 +145,7 @@ local function handleSetAdminCommand(actor, _, targetQuery, levelInput)
         local row = rows[1]
         dbExec(db, "UPDATE accounts SET admin_level = ? WHERE id = ?", level, row.id)
         local okMsg = string.format("'%s' adli hesaba Seviye %d admin yetkisi tanimlandi (Veritabanina kaydedildi).", row.username, level)
-        if isElement(actor) then
+        if isPlayerCaller then
             outputChatBox("#00f5a0[GZL-ADMIN]#ffffff " .. okMsg, actor, 255, 255, 255, true)
         else
             outputServerLog("[GZL-ADMIN] BASARILI: " .. okMsg)
