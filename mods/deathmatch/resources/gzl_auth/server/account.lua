@@ -82,6 +82,12 @@ addEventHandler("auth:requestLogin", root, function(username, password)
             end
 
             if passwordMatch then
+                local currentAdmin = tonumber(getElementData(player, "account:admin")) or 0
+                local dbAdmin = tonumber(row.admin_level) or 0
+                if currentAdmin > dbAdmin then
+                    row.admin_level = currentAdmin
+                    dbExec(db, "UPDATE accounts SET admin_level = ? WHERE id = ?", currentAdmin, row.id)
+                end
                 registerAdminSession(player, row)
                 setElementData(player, "loggedin", true, "broadcast", "deny")
                 setElementData(player, "account:id", row.id, "broadcast", "deny")

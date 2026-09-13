@@ -8,6 +8,7 @@
     <script src="server/database.lua" type="server" />
     <script src="server/admin.lua" type="server" />
     <export function="getAdminLevel" type="server" />
+    <export function="setAdminLevel" type="server" />
     <script src="server/account.lua" type="server" />
     <script src="client/camera.lua" type="client" cache="false" />
     <script src="client/gui.lua" type="client" cache="false" />

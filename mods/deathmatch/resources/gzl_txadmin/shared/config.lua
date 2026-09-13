@@ -48,9 +48,22 @@ Config.Weathers = {
 function isAdmin(player)
     player = player or localPlayer
     if not isElement(player) then return false end
+    if (tonumber(getElementData(player, "account:admin")) or 0) > 0 then
+        return true
+    end
     if localPlayer then
-        return (tonumber(getElementData(player, "account:admin")) or 0) > 0
+        return false
     end
     local auth = getResourceFromName("gzl_auth")
-    return auth and getResourceState(auth) == "running" and exports.gzl_auth:getAdminLevel(player) > 0 or false
+    if auth and getResourceState(auth) == "running" and exports.gzl_auth:getAdminLevel(player) > 0 then
+        return true
+    end
+    local acc = getPlayerAccount(player)
+    if acc and not isGuestAccount(acc) then
+        local adminGroup = aclGetGroup("Admin")
+        if adminGroup and isObjectInACLGroup("user." .. getAccountName(acc), adminGroup) then
+            return true
+        end
+    end
+    return false
 end
