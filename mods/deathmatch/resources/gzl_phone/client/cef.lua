@@ -165,7 +165,7 @@ local function showBrowser()
     executeBrowserJavascript(browser, "window.__mtaPhoneSetActive(true)")
     focusBrowser(browser)
     guiSetInputEnabled(phoneTyping)
-    guiSetInputMode("allow_binds")
+    guiSetInputMode(phoneTyping and "no_binds" or "allow_binds")
     CylexHold.setInput(true, phoneTyping)
     showCursor(true, false)
     executeBrowserJavascript(browser, "if(window.__mtaPhoneSyncTyping)window.__mtaPhoneSyncTyping()")
@@ -188,6 +188,7 @@ local function hideBrowser(immediate)
     guiSetInputEnabled(false)
     guiSetInputMode("allow_binds")
     showCursor(false, false)
+    if isElement(browser) then focusBrowser(nil) end
     stopCloseTimer()
     local function finishHide()
         if phoneOpen then return end
@@ -336,6 +337,10 @@ addEventHandler("cylex_phone:typing", root, function(state)
     phoneTyping = state
     CylexHold.setInput(true, state)
     guiSetInputEnabled(state)
+    guiSetInputMode(state and "no_binds" or "allow_binds")
+    if isElement(browser) and state then
+        focusBrowser(browser)
+    end
 end)
 
 local function transformRequest(endpoint, data)
@@ -693,6 +698,7 @@ end)
 addEventHandler("onClientClick", root, function(button, state)
     if phoneOpen and browserReady and isElement(browser) then
         if state == "down" then
+            focusBrowser(browser)
             injectBrowserMouseDown(browser, button)
         else
             injectBrowserMouseUp(browser, button)
@@ -706,6 +712,9 @@ addEventHandler("onClientKey", root, function(button, press)
         injectBrowserMouseWheel(browser, 40, 0)
     elseif button == "mouse_wheel_down" then
         injectBrowserMouseWheel(browser, -40, 0)
+    elseif button == string.lower(Config.OpenKey or "f1") then
+        togglePhone(false)
+        cancelEvent()
     end
 end)
 

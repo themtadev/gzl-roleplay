@@ -407,14 +407,16 @@ addEventHandler("onClientKey", root, function(button, press)
         end
     else
         if not canUseChat() then return end
-        if not isChatBoxInputActive() and not isConsoleActive() then
-            if button == "t" or button == "y" then
-                cancelEvent()
-                openChat("")
-            elseif button == "/" then
-                cancelEvent()
-                openChat("/")
-            end
+        if isChatBoxInputActive() or isConsoleActive() then return end
+        if (exports.gzl_core and exports.gzl_core.isPlayerTyping and exports.gzl_core:isPlayerTyping()) or (guiGetInputEnabled and guiGetInputEnabled()) or (exports.gzl_phone and exports.gzl_phone.isPhoneOpenState and exports.gzl_phone:isPhoneOpenState()) then
+            return
+        end
+        if button == "t" or button == "y" then
+            cancelEvent()
+            openChat("")
+        elseif button == "/" then
+            cancelEvent()
+            openChat("/")
         end
     end
 end)

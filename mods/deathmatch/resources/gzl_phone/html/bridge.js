@@ -7,6 +7,19 @@
     let bootstrap = {}
     let lastCameraImage = ""
     const localPhotoKey = "cylex_phone:mtaPhotos"
+    const froglyPostsKey = "cylex_phone:froglyPosts"
+    const getFroglyPosts = () => {
+        try {
+            const data = JSON.parse(localStorage.getItem(froglyPostsKey) || "[]")
+            if (Array.isArray(data)) return data
+        } catch {}
+        return []
+    }
+    const saveFroglyPosts = posts => {
+        try {
+            localStorage.setItem(froglyPostsKey, JSON.stringify(posts))
+        } catch {}
+    }
     const mediaOwner = () => String(bootstrap.identifier || bootstrap.phoneNumber || "")
     let mediaRevision = 0
 
@@ -195,19 +208,32 @@
         state.self_userdata.notes = noteList(bootstrap.notes)
         state.appdata.messages.messages = conversations()
         state.appdata.twitter.tweets = Array.isArray(bootstrap.tweets) ? bootstrap.tweets : []
+        if (state.appdata && state.appdata.frogly) {
+            state.appdata.frogly.posts = getFroglyPosts()
+        }
     }
 
     const firstLoginPayload = () => {
         const names = splitName(bootstrap.playerName || "GZL Oyuncu")
+        const cleanName = (bootstrap.playerName || "oyuncu").replace(/[^a-zA-Z0-9_]/g, "").toLowerCase() || "oyuncu"
         const settings = bootstrap.settings || {}
         const wallpaper = settings.wallpaper && String(settings.wallpaper).startsWith("images/") ? settings.wallpaper : "images/background/b1.png"
         const selectedAccounts = settings.selectedAccounts || {
-            twitter: { tag: "", password: "", logged: false },
-            instagram: { tag: "", password: "", logged: false },
-            hacker: { tag: "", password: "", logged: false },
-            frogly: { tag: "", password: "", logged: false },
-            swiper: { tag: "", password: "", logged: false },
-            foffy: { tag: "", password: "", logged: false }
+            twitter: { tag: cleanName, password: "gzl", logged: true },
+            instagram: { tag: cleanName, password: "gzl", logged: true },
+            hacker: { tag: cleanName, password: "gzl", logged: false },
+            frogly: { tag: cleanName, password: "gzl", logged: true },
+            swiper: { tag: cleanName, password: "gzl", logged: false },
+            foffy: { tag: cleanName, password: "gzl", logged: false }
+        }
+        if (!selectedAccounts.frogly || !selectedAccounts.frogly.tag) {
+            selectedAccounts.frogly = { tag: cleanName, password: "gzl", logged: true }
+        }
+        if (!selectedAccounts.twitter || !selectedAccounts.twitter.tag) {
+            selectedAccounts.twitter = { tag: cleanName, password: "gzl", logged: true }
+        }
+        if (!selectedAccounts.instagram || !selectedAccounts.instagram.tag) {
+            selectedAccounts.instagram = { tag: cleanName, password: "gzl", logged: true }
         }
         return {
             version: "9123845690325481243",
@@ -262,12 +288,43 @@
                 scale: 1,
                 contacts: contactList(bootstrap.contacts),
                 recentCalls: callList(bootstrap.callHistory || bootstrap.calls),
-                jobs: bootstrap.jobs || { allJobs: [], groups: [], playerJob: "" }
+                jobs: bootstrap.jobs || { allJobs: [], groups: [], playerJob: "" },
+                AppAccounts: {
+                    frogly: {
+                        [cleanName]: {
+                            tag: cleanName,
+                            nickname: bootstrap.playerName || "Oyuncu",
+                            picture: bootstrap.picture || "images/icons/default-user.png",
+                            verified: false
+                        }
+                    },
+                    twitter: {
+                        [cleanName]: {
+                            tag: cleanName,
+                            nickname: bootstrap.playerName || "Oyuncu",
+                            picture: bootstrap.picture || "images/icons/default-user.png",
+                            verified: false
+                        }
+                    },
+                    instagram: {
+                        [cleanName]: {
+                            tag: cleanName,
+                            nickname: bootstrap.playerName || "Oyuncu",
+                            picture: bootstrap.picture || "images/icons/default-user.png",
+                            verified: false
+                        }
+                    }
+                }
             },
             appdata: {
                 gallery: { photos: photoList(bootstrap.photos), photo_albums: [] },
                 bank: { transactions: transactionList(bootstrap.transactions) },
-                notes: { notes: noteList(bootstrap.notes) }
+                notes: { notes: noteList(bootstrap.notes) },
+                frogly: {
+                    posts: getFroglyPosts(),
+                    explorePosts: [],
+                    messages: {}
+                }
             }
         }
     }
@@ -614,6 +671,94 @@
             data = {}
         }
         if (data && typeof data.data === "object" && data.data !== null) data = data.data
+        if (endpoint === "frogly:sendPost") {
+            const charTag = ((bootstrap.playerName || "oyuncu").replace(/[^a-zA-Z0-9_]/g, "").toLowerCase()) || "oyuncu"
+            const posts = getFroglyPosts()
+            const post = {
+                id: Date.now(),
+                tag: charTag,
+                text: data.text || "",
+                images: Array.isArray(data.images) ? data.images : (data.images ? [data.images] : []),
+                price: Number(data.price || 0),
+                time: Math.floor(Date.now() / 1000),
+                likes: [],
+                comments: [],
+                purchased: []
+            }
+            posts.unshift(post)
+            saveFroglyPosts(posts)
+            const state = storeState()
+            if (state && state.appdata && state.appdata.frogly) {
+                state.appdata.frogly.posts = posts
+            }
+            return Promise.resolve(response({ success: true, post }))
+        }
+        if (endpoint === "frogly:fetchTimeline" || endpoint === "frogly:fetchExplorePosts" || endpoint === "frogly:getPosts") {
+            const posts = getFroglyPosts()
+            return Promise.resolve(response({ success: true, posts, hasMore: false }))
+        }
+        if (endpoint === "frogly:sendPostComment") {
+            const charTag = ((bootstrap.playerName || "oyuncu").replace(/[^a-zA-Z0-9_]/g, "").toLowerCase()) || "oyuncu"
+            const posts = getFroglyPosts()
+            const target = posts.find(p => String(p.id) === String(data.id))
+            if (target) {
+                target.comments = target.comments || []
+                target.comments.push({
+                    id: Date.now(),
+                    tag: charTag,
+                    text: data.text || "",
+                    time: Math.floor(Date.now() / 1000),
+                    likes: []
+                })
+                saveFroglyPosts(posts)
+                const state = storeState()
+                if (state && state.appdata && state.appdata.frogly) {
+                    state.appdata.frogly.posts = posts
+                }
+            }
+            return Promise.resolve(response({ success: true }))
+        }
+        if (endpoint === "frogly:likePost") {
+            const charTag = ((bootstrap.playerName || "oyuncu").replace(/[^a-zA-Z0-9_]/g, "").toLowerCase()) || "oyuncu"
+            const posts = getFroglyPosts()
+            const target = posts.find(p => String(p.id) === String(data.id))
+            if (target) {
+                target.likes = target.likes || []
+                const idx = target.likes.indexOf(charTag)
+                if (idx === -1) target.likes.push(charTag)
+                else target.likes.splice(idx, 1)
+                saveFroglyPosts(posts)
+                const state = storeState()
+                if (state && state.appdata && state.appdata.frogly) {
+                    state.appdata.frogly.posts = posts
+                }
+            }
+            return Promise.resolve(response({ success: true }))
+        }
+        if (endpoint === "app:createAccount" || endpoint === "app:loginAccount") {
+            const app = data.app || "frogly"
+            const tag = (data.tag || "").toLowerCase()
+            const state = storeState()
+            if (state) {
+                if (state.self_userdata && state.self_userdata.selectedAccounts) {
+                    state.self_userdata.selectedAccounts[app] = {
+                        tag,
+                        password: data.password || "",
+                        logged: true
+                    }
+                }
+                if (state.data && state.data.AppAccounts) {
+                    state.data.AppAccounts[app] = state.data.AppAccounts[app] || {}
+                    state.data.AppAccounts[app][tag] = {
+                        tag,
+                        nickname: data.nickname || data.tag,
+                        picture: bootstrap.picture || "images/icons/default-user.png",
+                        verified: false
+                    }
+                }
+            }
+            return Promise.resolve(response({ success: true }))
+        }
         if (endpoint === "gallery:removePhotos" || endpoint === "gallery:removeBrokenImages") {
             const ids = Array.isArray(data.ids) ? data.ids : [data.id]
             const localIds = ids.filter(id => String(id).startsWith("mta-capture-"))
@@ -661,26 +806,78 @@
     }
 
     let typingState = false
-    window.__mtaPhoneSyncTyping = () => {
-        const element = document.activeElement
-        const editable = element && (element.isContentEditable || element.tagName === "TEXTAREA" || element.tagName === "IFRAME" || element.tagName === "INPUT" && !["button", "checkbox", "radio", "range", "submit", "reset", "file", "color"].includes(element.type))
-        const state = Boolean(active && editable && !element.disabled && !element.readOnly)
-        typingState = state
-        if (window.mta && typeof window.mta.triggerEvent === "function") window.mta.triggerEvent("cylex_phone:typing", state)
+    const isEditable = el => {
+        if (!el || el.disabled || el.readOnly) return false
+        if (el.isContentEditable) return true
+        const tag = (el.tagName || "").toUpperCase()
+        if (tag === "TEXTAREA" || tag === "IFRAME") return true
+        if (tag === "INPUT") {
+            const type = (el.type || "text").toLowerCase()
+            return !["button", "checkbox", "radio", "range", "submit", "reset", "file", "color", "image"].includes(type)
+        }
+        return false
     }
-    document.addEventListener("focusin", window.__mtaPhoneSyncTyping)
-    document.addEventListener("focusout", () => queueMicrotask(window.__mtaPhoneSyncTyping))
+
+    const checkTyping = () => {
+        if (!active) return false
+        const el = document.activeElement
+        return isEditable(el)
+    }
+
+    window.__mtaPhoneSyncTyping = () => {
+        const state = checkTyping()
+        if (state !== typingState) {
+            typingState = state
+            if (window.mta && typeof window.mta.triggerEvent === "function") {
+                window.mta.triggerEvent("cylex_phone:typing", state)
+            }
+        }
+    }
+
+    document.addEventListener("focusin", window.__mtaPhoneSyncTyping, true)
+    document.addEventListener("focusout", () => setTimeout(window.__mtaPhoneSyncTyping, 40), true)
+    document.addEventListener("focus", window.__mtaPhoneSyncTyping, true)
+    document.addEventListener("blur", () => setTimeout(window.__mtaPhoneSyncTyping, 40), true)
+    document.addEventListener("input", window.__mtaPhoneSyncTyping, true)
+
+    document.addEventListener("click", event => {
+        const target = event.target
+        if (!target) return
+        const editable = target.closest ? target.closest("input, textarea, [contenteditable='true']") : null
+        if (editable && !editable.disabled && !editable.readOnly && isEditable(editable)) {
+            if (document.activeElement !== editable) {
+                editable.focus()
+            }
+            setTimeout(window.__mtaPhoneSyncTyping, 10)
+        } else {
+            setTimeout(window.__mtaPhoneSyncTyping, 40)
+        }
+    }, true)
+
     window.addEventListener("mta-phone-active", () => {
         if (!active && typingState && document.activeElement) document.activeElement.blur()
         window.__mtaPhoneSyncTyping()
     })
 
     window.addEventListener("keydown", event => {
-        if ((event.key === "Escape" || event.key === "F4") && active && window.mta && typeof window.mta.triggerEvent === "function") {
+        if (!active) return
+        if (event.key === "Escape") {
+            if (typingState && document.activeElement && typeof document.activeElement.blur === "function") {
+                document.activeElement.blur()
+                window.__mtaPhoneSyncTyping()
+                event.preventDefault()
+                event.stopPropagation()
+                return
+            }
+            if (window.mta && typeof window.mta.triggerEvent === "function") {
+                event.preventDefault()
+                window.mta.triggerEvent("cylex_phone:closeRequest")
+            }
+        } else if ((event.key === "F1" || event.key === "F4") && window.mta && typeof window.mta.triggerEvent === "function") {
             event.preventDefault()
             window.mta.triggerEvent("cylex_phone:closeRequest")
         }
-    })
+    }, true)
 
     window.__mtaPhoneSetActive(false)
 })()
