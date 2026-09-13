@@ -1001,7 +1001,6 @@
         <right name="general.ModifyOtherObjects.gzl_radio" access="true"/>
         <right name="general.ModifyOtherObjects.gzl_rescpu" access="true"/>
         <right name="general.ModifyOtherObjects.gzl_steer" access="true"/>
-        <right name="general.ModifyOtherObjects.gzl_taxi" access="true"/>
         <right name="general.ModifyOtherObjects.gzl_txadmin" access="true"/>
         <right name="general.ModifyOtherObjects.gzl_ui" access="true"/>
         <right name="general.ModifyOtherObjects.gzl_vehicles" access="true"/>

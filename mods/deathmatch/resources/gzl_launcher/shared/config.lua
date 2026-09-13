@@ -92,7 +92,6 @@ Config.Phases = {
             { name = "gzl_weaponsounds", desc = "NextGen EarShot Gercekci Silah Sesleri & Yanki Sistemi" },
             { name = "gzl_steer", desc = "Dinamik Arac Direksiyonu Donus & Fizik Sistemi" },
             { name = "gzl_vehiclesounds", desc = "CarsSoundFX Realistik Arac Motor Sesleri, Turbo & Egzoz Patlatma" },
-            { name = "gzl_taxi", desc = "Taxi Boss Stili Taksi Meslegi & Neco Baskan" },
             { name = "gzl_mechanic", desc = "Benny's Original Motor Works & Gelismis Mekanik Sistemi" },
             { name = "gzl_ems", desc = "Liquid Glass DX EMS & Koma/Yaralanma Sistemi" },
             { name = "gzl_pd", desc = "Polis Departmanı, Tablet & Ceza Sistemi" },

@@ -37,7 +37,6 @@
     <file src="dist/assets/musicbanner-925f4495.png" />
     <file src="dist/assets/voice-mic-mask-4b949139.svg" />
     <file src="dist/assets/weapon-c0b46e27.png" />
-    <file src="dist/index.html" />
     
     <export function="setHUDVisible" type="client" />
     <export function="isHUDVisible" type="client" />

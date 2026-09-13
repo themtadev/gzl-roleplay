@@ -101,7 +101,6 @@
     <file src="web/build/images/WEAPON_G22.png" />
     <file src="web/build/images/WEAPON_GADGETPISTOL.png" />
     <file src="web/build/images/WEAPON_GARBAGEBAG.PNG" />
-    <file src="web/build/images/WEAPON_GLOCK.png" />
     <file src="web/build/images/weapon_glock.png" />
     <file src="web/build/images/WEAPON_GLOCK19.png" />
     <file src="web/build/images/WEAPON_GLOCK2.png" />
@@ -556,7 +555,6 @@
     <file src="web/build/images/defib.png" />
     <file src="web/build/images/defibrillator.png" />
     <file src="web/build/images/dendrogyra_coral.png" />
-    <file src="web/build/images/desktop.ini" />
     <file src="web/build/images/diamond.png" />
     <file src="web/build/images/diamond_earring.png" />
     <file src="web/build/images/diamond_earring_silver.png" />
