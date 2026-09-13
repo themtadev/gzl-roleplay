@@ -1,157 +1,37 @@
-===============================================================================
-           GZL ROLEPLAY v1.0 — DETAYLI KULLANIM VE ALTYAPI REHBERI
-===============================================================================
+GZL ROLEPLAY v1.0 — KULLANIM REHBERI
 
-Bu rehber, Script Dunyasi ve MTA toplulugu icin hazirlanmis GZL Roleplay 
-altyapisinin calisma mantigini, mimari felsefesini ve kullanimini aciklar.
+Piyasadaki cop ve acik dolu paketlerle karistirmayin. 
+XAMPP, MySQL veya Navicat kurmaya kalkmayin, altyapi tamamen SQLite. Cift tikla ac oyna.
 
--------------------------------------------------------------------------------
-1. ALTYAPI FELSEFESI VE GENEL MANTIK
--------------------------------------------------------------------------------
-GZL Roleplay, klasik spagetti kodlu MTA sunucularindan farkli olarak moduler,
-performans odakli ve bagimsiz (Zero-Config) bir mimari ile insa edilmistir.
+1. GENEL MANTIK
+- SQLite: Harici veritabani gerekmez. Tum veriler sqlite dosyalarinda tutulur.
+- gzl_launcher: Scriptler rastgele degil, bagimlilik sirasina gore 6 asamada baslar.
+- Guvenlik: Event spam, yetkisiz payload ve aciklar kapatilmistir.
 
-* MySQL / XAMPP GEREKTIRMEZ:
-  Sunucu tamamen dosya tabanli SQLite altyapisina baglidir. Harici bir veritabani
-  sunucusu kurmaniz, import/export hatalariyla ugrasmaniz gerekmez. Paketi
-  indiren kisi "MTA Server64.exe"yi calistirdigi anda her sey hazirdir.
+2. VERITABANLARI
+- mods/deathmatch/databases/global/database.db: Birlikler ve loglar
+- mods/deathmatch/resources/gzl_auth/database.db: Hesaplar ve sifreler
+- mods/deathmatch/resources/gzl_characters/database.db: Karakterler ve kiyafetler
+- mods/deathmatch/resources/gzl_inventory/data/: Envanter json dosyalari
+- mods/deathmatch/resources/gzl_phone/phone.db: Telefon verileri
+- mods/deathmatch/resources/gzl_vehicles/database.db: Araclar
 
-* MODULER YAPI:
-  Tum ozel scriptler "gzl_" onekiyle ayrilmistir. Resource'lar birbirlerinin 
-  dahili verilerine direkt erismek yerine Guvenli Export API'leri uzerinden 
-  haberlesir. Boylece bir sistem guncellendiginde digerleri bozulmaz.
-
--------------------------------------------------------------------------------
-2. GZL LAUNCHER (6 ASAMALI SIRALI BASLATMA MOTORU)
--------------------------------------------------------------------------------
-MTA normalde resource'lari rastgele yukler ve bu durum bagimlilik hatalarina 
-yol acar. GZL Roleplay'de bu sorun "gzl_launcher" ile cozulmustur.
-
-Sunucu acildiginda "gzl_launcher" devreye girer ve scriptleri 6 asamada sirayla acar:
-
-  FAZ 1: Core & Foundation (Temel Cekirdek & Harita)
-         - gzl_anticheat    : Event ve veri guvenlik kordurucusu
-         - gzl_logs         : Merkezi SQLite audit & loglama motoru
-         - gzl_core         : Ana RP fonksiyonlari ve element data yonetimi
-         - gps              : Guvenli yol agi ve rota hesaplama motoru
-         - gzl_map          : Ozel Los Santos interior ve harita yukleyicisi
-
-  FAZ 2: UI & Graphic Engine (Grafik & Arayuz Motoru)
-         - gzl_ui           : Liquid Glass DX arayuz kutuphanesi
-         - gzl_atmosphere   : Gercek zamanli 24 saatlik isiklandirma ve shaderlar
-
-  FAZ 3: Auth & Identity Systems (Giris & Karakter Sistemleri)
-         - gzl_auth         : Guvenli hesap giris, kayit ve sinematik kamera
-         - gzl_creator      : FiveM stili 3D yuz, sac, sakal, kiyafet olusturucu
-         - gzl_characters   : Coklu karakter secim ve yonetim motoru
-
-  FAZ 4: Economy, Inventory & World (Ekonomi, Envanter & Dunya)
-         - gzl_factions     : Birlik (LSPD, EMS, Mekanik) yonetimi
-         - gzl_inventory    : OX-Style CEF surukle-birak envanter sistemi
-         - gzl_market       : Risk Market DX market ve alisveris sistemi
-         - gzl_vehicles     : Veritabani arac galerisi, garaj ve vale sistemi
-         - gzl_fuel         : Istasyon isletmeciligi ve dinamik yakit sistemi
-         - gzl_atm          : ATM ve bankacilik DX sistemi
-         - gzl_phone        : Cylex akilli telefon sistemi
-         - gzl_discord-rpc  : Discord zengin durum entegrasyonu
-
-  FAZ 5: HUD, Radar & Communications (Gostergeler & Iletisim)
-         - gzl_chat         : CEF tabanli rol sohbeti ve komutlar
-         - gzl_radio        : CEF telsiz kanallari ve ses yonlendirmesi
-         - gzl_hud          : Can, zirh, aclik, susuzluk durum paneli
-         - gzl_radar        : GTA V dairesel minimap, blipler ve anlik GPS navigasyon
-
-  FAZ 6: Custom & Addon Scripts (Meslekler, Yan Sistemler & txAdmin)
-         - gzl_txadmin      : txAdmin v6.0.2 DX yonetici paneli
-         - gzl_firstperson  : Gelismis FPS birinci sahis kamera modu
-         - gzl_animations   : Ozel animasyon paketi ve teslim olma
-         - gzl_mods         : Otomatik arac ve kaplama yukleyicisi
-         - gzl_weaponsounds : Realistik silah sesleri ve yanki motoru
-         - gzl_steer        : Dinamik arac direksiyon donus fizigi
-         - gzl_vehiclesounds: Gercek motor, egzoz ve turbo sesleri
-         - gzl_taxi         : Taksimetre ve dinamik yolcu meslegi
-         - gzl_mechanic     : Benny's modifiye ve tamir sistemi
-         - gzl_ems          : Sedye, koma/yaralanma carki ve ambulans sistemi
-         - gzl_pd           : Polis tableti, arama, ceza ve kelepce sistemi
-         - gzl_window-cleaning : Gokdelen cam temizleme ekip meslegi
-         - gzl_driving      : Surucu kursu ve ehliyet sinavi
-         - gzl_blackjack    : Casino masalari ve krupiye animasyonlari
-
--------------------------------------------------------------------------------
-3. VERITABANI YAPISI VE DOSYALARIN YERI
--------------------------------------------------------------------------------
-Veriler SQLite dosyalarinda ve ozel JSON dosyalarinda tutulur:
-
-  * mods/deathmatch/databases/global/database.db:
-    Birlikler (factions), rütbeler (faction_ranks) ve sistem loglari.
-
-  * mods/deathmatch/resources/gzl_auth/database.db:
-    Kullanici hesaplari (accounts), bcrypt sifre hashleri ve admin seviyeleri.
-
-  * mods/deathmatch/resources/gzl_characters/database.db:
-    Karakter bilgileri (characters), saglik, aclik, para, kiyafet json verileri.
-
-  * mods/deathmatch/resources/gzl_inventory/data/player_inventories.json:
-    Oyuncularin uzerindeki tum esyalar ve slotlari.
-
-  * mods/deathmatch/resources/gzl_inventory/data/world_drops.json:
-    Yere atilan ve 3D dunya modeli olarak gorunen esyalar.
-
-  * mods/deathmatch/resources/gzl_phone/phone.db:
-    Rehber, mesajlar, tweetler, banka transfer kayitlari.
-
-  * mods/deathmatch/resources/gzl_vehicles/database.db:
-    Sahip olunan araclar, plakalar, renk ve modifiye verileri.
-
-  * mods/deathmatch/resources/gzl_fuel/fuel.db:
-    6 adet benzin istasyonu, fiyatlar, stok ve calisanlar.
-
--------------------------------------------------------------------------------
-4. ILK ADMİNLİK VE YETKİ ALMA
--------------------------------------------------------------------------------
-Veritabanina elle girmeye veya Navicat acmaya gerek YOKTUR.
-
-1. Sunucuyu calistirin ("MTA Server64.exe").
-2. Oyuna baglanip bir hesap ve karakter olusturun (Orn: Ahmet).
-3. MTA Server Konsoluna gelip su komutu yazin:
-
+3. ADMINLIK ALMA
+1. MTA Server64.exe dosyasini calistirin.
+2. Oyuna girip hesap acin.
+3. Sunucu konsoluna su komutu yazin:
    accountadmin KullaniciAdiniz 10
+Bu komut direkt Kurucu (Seviye 10) yetkisi verir. Oyunda Page Up tusuna basarak txAdmin'i acabilirsiniz.
 
-   Ornek: accountadmin Ahmet 10
+4. TUSLAR
+- F1: Telefon (/telefon)
+- F2 / I: Envanter
+- Page Up: txAdmin
+- M: Imlec (/cursor)
+- J: Motor
+- X: Eller yukari
+- V / Home: FPS kamera
+- Sol Alt: Telsiz
+- T: Sohbet
 
-Bu komut hesabinizin yetkisini aninda Seviye 10 (Kurucu) yapar.
-Artik oyunda "Page Up" tusuna basarak txAdmin yonetim panelini acabilirsiniz!
-
--------------------------------------------------------------------------------
-5. OYUN ICI TUSLAR VE KISAYOLLAR
--------------------------------------------------------------------------------
-  * F1               : Akilli Telefonu Acar/Kapatir (/telefon)
-  * F2 veya I        : OX-Style CEF Envanteri Acar
-  * Page Up          : txAdmin Yonetim Menusunu Acar (Yetki gerektirir)
-  * M                : Fare Imlecini Serbest Birakir / Kilitler (/cursor)
-  * J                : Arac Motorunu Calistirir / Durdurur
-  * X                : Elleri Yukari Kaldirir (Teslim Olma)
-  * V veya Home      : FPS (Birinci Sahis) Kamera Moduna Gecer
-  * Sol Alt (LAlt)   : Telsiz Bas-Konus (PTT)
-  * T                : Rol Sohbetini Acar
-
--------------------------------------------------------------------------------
-6. YENI BIR SCRIPT VEYA MESLEK EKLEMEK
--------------------------------------------------------------------------------
-Eger sunucuya yeni bir resource eklerseniz:
-"mods/deathmatch/resources/gzl_launcher/shared/config.lua" dosyasini acin.
-"Config.Phases" tablosunda ilgili fazin altina yeni resource'unuzun adini ekleyin:
-
-  { name = "yeni_meslek", desc = "Ozel Meslek Sistemi" },
-
-Launcher sunucu her basladiginda bu sistemi dogru sirayla otomatik baslatacaktir.
-
--------------------------------------------------------------------------------
-7. LISANS VE DESTEK
--------------------------------------------------------------------------------
-GZL Roleplay Altyapisi, Script Dunyasi toplulugu icin optimize edilmis ve 
-guvenlik aciklari kapatilmis temiz bir surumdur.
-
-Gelistirici: thommy & GZL Development Team
-Iyi roller, basarili projeler dileriz!
-===============================================================================
+Gelistirici: thommy
