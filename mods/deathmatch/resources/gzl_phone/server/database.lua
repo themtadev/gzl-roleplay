@@ -8,6 +8,7 @@ function initPhoneDatabase()
     end
 
     outputServerLog("[cylex_phone] SQLite phone.db baglantisi basariyla kuruldu.")
+    dbExec(phoneDB, "CREATE TABLE IF NOT EXISTS phone_app_state (app TEXT PRIMARY KEY, data TEXT NOT NULL)")
 
     dbExec(phoneDB, [[
         CREATE TABLE IF NOT EXISTS phone_users (

@@ -1,0 +1,25 @@
+<!doctype html><meta charset="utf-8"><title>Phone regression preview</title>
+<style>body{margin:0;background:#555;color:white;font:14px Arial}nav{position:fixed;z-index:3;top:8px;left:8px;width:190px}button,select{margin:3px;padding:8px;max-width:180px}iframe{width:100vw;height:100vh;border:0}pre{white-space:pre-wrap;font-size:11px;max-height:220px;overflow:auto}</style>
+<nav><p>Isolated preview — no live server</p><select id="apps"></select><button id="open">Open application</button><button id="login">Show account form</button><button id="refresh">Repeat bootstrap</button><pre id="errors"></pre></nav>
+<iframe src="../html/index.html?revision=20260914-3" id="phone"></iframe>
+<script>
+const frame=document.getElementById('phone'), errors=document.getElementById('errors');
+const fixture={identifier:'preview',phoneNumber:'555-9999',iban:'GZL-9999',playerName:'Preview Player',bankBalance:1000,contacts:[],messages:{},photos:[],settings:{},appServices:{}};
+let fixtureLoaded=false;
+fetch('./fixtures.json').then(r=>r.ok?r.json():null).then(data=>{if(data)fixture.appServices=data;fixtureLoaded=true}).catch(()=>{fixtureLoaded=true});
+for(const app of ['frogly','twitter','instagram','foffy','swiper','hacker']) fixture.appServices[app]={app,accounts:{preview:{tag:'preview',nickname:'Preview Player',following:[],followers:[],notifications:[],picture:'',bio:''}},selected:{tag:'preview',password:'session',logged:true},posts:[],messages:{}};
+const ready=setInterval(()=>{
+ const win=frame.contentWindow;
+ if(!fixtureLoaded || !win.$store || !win.document.querySelector('.phone-container'))return;
+ clearInterval(ready);
+ win.addEventListener('error',e=>errors.textContent+=e.message+'\n');
+ win.addEventListener('unhandledrejection',e=>errors.textContent+=String(e.reason)+'\n');
+ win.__mtaPhoneBootstrap(structuredClone(fixture));win.__mtaPhoneSetActive(true);
+ win.__mtaPhoneReceive({action:'open',bool:true});
+ const apps=document.getElementById('apps');
+ for(const app of ['home','frogly','twitter','instagram','foffy','swiper','hacker','messages','contacts','call','gallery','notes','settings','bank','mail','yellowpage','darkchat','garage','house','company','billing','clock','calculator','camera','music','youtube','news','racing','streaming','casino']){const o=document.createElement('option');o.value=app;o.textContent=app;apps.append(o)}
+ document.getElementById('open').onclick=()=>{errors.textContent='';win.$store.dispatch('onClickApp',apps.value)};
+ document.getElementById('login').onclick=()=>{const app=apps.value;win.$store.state.self_userdata.selectedAccounts[app]={tag:'',password:'',logged:false};win.$store.dispatch('change'+app.charAt(0).toUpperCase()+app.slice(1)+'Page','create_account')};
+ document.getElementById('refresh').onclick=()=>win.__mtaPhoneBootstrap(structuredClone(fixture));
+},100);
+</script>

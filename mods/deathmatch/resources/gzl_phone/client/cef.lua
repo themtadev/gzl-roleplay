@@ -12,6 +12,7 @@ local bootstrapData = {}
 local pendingEndpoints = {}
 local queuedIncomingCall
 local activeCallNumber = ""
+local queuedNotifications = {}
 
 local routeMap = {
     ["callapp:getContacts"] = "updateContacts",
@@ -28,6 +29,7 @@ local routeMap = {
     ["messages:sendMessage"] = "sendMessage",
     ["startPhoneCall"] = "startCall",
     ["bank:sendMoney"] = "transferMoney",
+    ["bank:refreshBank"] = "getBootstrapData",
     ["notes:saveText"] = "createNote",
     ["notes:removeNote"] = "deleteNote",
     ["gallery:sendPhoto"] = "savePhoto",
@@ -41,6 +43,13 @@ local routeMap = {
     ["yellowPage:fetchMore"] = "getAds",
     ["yellowpage:sendPost"] = "postAd",
     ["darkchat:sendMessage"] = "sendDarkMessage"
+}
+local utilityRoutes = {
+    ["gallery:createAlbum"]=true,["gallery:deleteAlbum"]=true,["gallery:addPhotoToAlbum"]=true,
+    ["gallery:addPhotosToAlbum"]=true,["gallery:removePhotoFromAlbum"]=true,["gallery:removePhotosFromAlbum"]=true,
+    ["gallery:batchRemoveFromAlbums"]=true,["gallery:toggleFavorite"]=true,
+    ["mail:getMails"]=true,["mail:removeMail"]=true,["mail:sendMail"]=true,["garage:getVehicles"]=true,["garage:markVehicle"]=true,
+    ["yellowpage:removePost"]=true
 }
 
 local function compactJSON(value)
@@ -89,7 +98,13 @@ local function sendUI(payload)
 end
 
 local function sendPhoneEvent(kind, value)
-    if not browserReady or not isElement(browser) then return false end
+    if not browserReady or not isElement(browser) then
+        if kind == "notification" then
+            queuedNotifications[#queuedNotifications+1] = value
+            if #queuedNotifications > 50 then table.remove(queuedNotifications,1) end
+        end
+        return false
+    end
     local kindJSON = compactJSON(kind)
     local encoded = encodeString("base64", compactJSON(value))
     if not encoded then return false end
@@ -118,6 +133,7 @@ local function enrichBootstrap(data)
 end
 
 local function sendBootstrap()
+    if not bootstrapData.phoneNumber then return false end
     bootstrapData = enrichBootstrap(bootstrapData)
     return browserValue("__mtaPhoneBootstrap", bootstrapData)
 end
@@ -222,7 +238,7 @@ local function failBrowserStartup(reason)
     if isElement(browser) then destroyElement(browser) end
     browser = nil
     outputDebugString("[cylex_phone] " .. tostring(reason), 1)
-    outputChatBox("Telefon yüklenemedi. F4 ile tekrar deneyebilirsin; hata ayrıntısı F8 konsolunda.", 255, 100, 100)
+    outputChatBox("Telefon yüklenemedi. " .. tostring(Config.OpenKey or "F1") .. " ile tekrar deneyebilirsin; hata ayrıntısı F8 konsolunda.", 255, 100, 100)
 end
 
 addEvent("cylex_phone:browserReady", true)
@@ -233,6 +249,8 @@ addEventHandler("cylex_phone:browserReady", root, function()
     sendUI({ action = "clientLoaded", value = true })
     sendBootstrap()
     requestBootstrap()
+    for _, notification in ipairs(queuedNotifications) do sendPhoneEvent("notification",notification) end
+    queuedNotifications = {}
     if pendingOpen or phoneOpen then
         pendingOpen = false
         showBrowser()
@@ -273,17 +291,25 @@ local function createPhoneBrowser()
         if source ~= browser then return end
         executeBrowserJavascript(browser, "if(window.__mtaPhoneNotifyReady)window.__mtaPhoneNotifyReady()")
     end)
+    addEventHandler("onClientBrowserInputFocusChanged", browser, function(state)
+        if source ~= browser or not phoneOpen then return end
+        phoneTyping = state == true
+        CylexHold.setInput(true, phoneTyping)
+        guiSetInputMode(phoneTyping and "no_binds" or "allow_binds")
+        if phoneTyping then focusBrowser(browser) end
+    end)
     return true
 end
 
 local function hasCharacter()
-    return getElementData(localPlayer, "char:id") or getElementData(localPlayer, "character:id") or getElementData(localPlayer, "loggedin_character") or getElementData(localPlayer, "account:id")
+    return tonumber(getElementData(localPlayer, "char:id") or getElementData(localPlayer, "character:id"))
 end
 
 function togglePhone(forceState)
     local targetState = forceState
     if type(targetState) ~= "boolean" then targetState = not phoneOpen end
     if targetState == phoneOpen then return phoneOpen end
+    if targetState and not hasCharacter() then return false end
     if targetState then
         local dxPhone = getResourceFromName("high_phone")
         if dxPhone and getResourceState(dxPhone) == "running" and exports.high_phone and exports.high_phone.isPhoneOpenState and exports.high_phone.togglePhone and exports.high_phone:isPhoneOpenState() then
@@ -453,6 +479,14 @@ addEventHandler("cylex_phone:browserRequest", root, function(id, endpoint, body)
     end
     local data = fromJSON(body)
     if type(data) ~= "table" then data = {} end
+    if endpoint == "toggleKeepInput" then
+        phoneTyping = phoneOpen and data.toggle == false
+        CylexHold.setInput(phoneOpen, phoneTyping)
+        guiSetInputMode(phoneTyping and "no_binds" or "allow_binds")
+        if phoneTyping then focusBrowser(browser) end
+        resolveBrowser(id, { success = true })
+        return
+    end
     if endpoint == "JSLoaded" then
         resolveBrowser(id, { success = true })
         return
@@ -492,16 +526,28 @@ addEventHandler("cylex_phone:browserRequest", root, function(id, endpoint, body)
         bootstrapData.settings = type(bootstrapData.settings) == "table" and bootstrapData.settings or {}
         if data.key then bootstrapData.settings[data.key] = data.value end
         pendingEndpoints[id] = endpoint
-        triggerServerEvent("cylex_phone:serverCallback", localPlayer, "updateSettings", { settings = bootstrapData.settings }, id)
+        triggerServerEvent("cylex_phone:serverCallback", localPlayer, "updateSettings", { key = data.key, value = data.value }, id)
         return
     end
-    if endpoint == "message:waypoint" or endpoint:find(":waypoint$") or endpoint == "garage:markVehicle" or endpoint == "house:markHouse" or endpoint == "racing:locateRacing" then
+    if utilityRoutes[endpoint] or endpoint:find('^house:') then
+        pendingEndpoints[id] = endpoint
+        triggerServerEvent("cylex_phone:serverCallback",localPlayer,"appRequest",{endpoint=endpoint,payload=data},id)
+        return
+    end
+    if endpoint == "message:waypoint" or endpoint:find(":waypoint$") or endpoint == "house:markHouse" or endpoint == "racing:locateRacing" then
         resolveBrowser(id, { success = sendWaypoint(data) })
         return
     end
     local serverEndpoint = routeMap[endpoint]
+    local app = endpoint:match("^([^:]+):")
+    if app == "app" or app == "appAccounts" or app == "frogly" or app == "twitter" or app == "instagram" or app == "foffy" or app == "swiper" or app == "hacker" or app == "darkchat"
+        or endpoint == "sendTweet" or endpoint == "deleteTweet" or endpoint == "likeTweet" or endpoint == "sendTweetComment" or endpoint == "deleteTweetComment" or endpoint == "likeTweetComment" then
+        pendingEndpoints[id] = endpoint
+        triggerServerEvent("cylex_phone:serverCallback",localPlayer,"appRequest",{endpoint=endpoint,payload=data},id)
+        return
+    end
     if not serverEndpoint then
-        resolveBrowser(id, { success = true })
+        resolveBrowser(id, { success = false, error = "unsupported_endpoint" })
         return
     end
     pendingEndpoints[id] = endpoint
@@ -525,6 +571,10 @@ addEventHandler("cylex_phone:serverCallbackResponse", root, function(cbId, data)
     local endpoint = pendingEndpoints[tostring(cbId)] or pendingEndpoints[cbId]
     pendingEndpoints[tostring(cbId)] = nil
     pendingEndpoints[cbId] = nil
+    if (endpoint == "garage:markVehicle" or endpoint == "house:markHouse") and type(data) == "table" and data.success then
+        data.success = sendWaypoint(data)
+        if not data.success then data.error = "Map waypoint service is unavailable." end
+    end
     if endpoint == "messages:sendMessage" and type(data) == "table" and type(data.message) == "table" then
         sendPhoneEvent("message", data.message)
     elseif endpoint == "bank:sendMoney" and type(data) == "table" and data.success then
@@ -551,6 +601,7 @@ addEventHandler("cylex_phone:clientInitData", root, function(data)
     bootstrapData.calls = data.calls or bootstrapData.calls
     bootstrapData.notes = data.notes or bootstrapData.notes
     bootstrapData.photos = data.photos or bootstrapData.photos
+    if browserReady then requestBootstrap() end
 end)
 
 addEvent("cylex_phone:incomingCall", true)
@@ -712,7 +763,7 @@ addEventHandler("onClientKey", root, function(button, press)
         injectBrowserMouseWheel(browser, 40, 0)
     elseif button == "mouse_wheel_down" then
         injectBrowserMouseWheel(browser, -40, 0)
-    elseif button == string.lower(Config.OpenKey or "f1") then
+    elseif button == string.lower(Config.OpenKey or "f1") and phoneTyping then
         togglePhone(false)
         cancelEvent()
     end
@@ -728,4 +779,34 @@ end)
 
 addCommandHandler("phone", function()
     togglePhone()
+end)
+local lastCharacterId = hasCharacter()
+addEventHandler("onClientElementDataChange",localPlayer,function(key)
+    if key ~= "char:id" and key ~= "character:id" then return end
+    local current = hasCharacter()
+    if current == lastCharacterId then return end
+    lastCharacterId = current
+    togglePhone(false)
+    hideBrowser(true)
+    stopStartupTimer()
+    if isElement(browser) then destroyElement(browser) end
+    browser = nil
+    browserReady = false
+    bootstrapData = {}
+    pendingEndpoints = {}
+    queuedIncomingCall = nil
+    queuedNotifications = {}
+    activeCallNumber = ""
+end)
+
+addEvent("cylex_phone:socialUpdate",true)
+addEventHandler("cylex_phone:socialUpdate",resourceRoot,function(data)
+    if type(data) ~= "table" or type(data.app) ~= "string" then return end
+    bootstrapData.appServices = bootstrapData.appServices or {}
+    bootstrapData.appServices[data.app] = data
+    browserValue("__mtaPhoneSocial",data)
+end)
+addEvent("cylex_phone:darkUpdate",true)
+addEventHandler("cylex_phone:darkUpdate",resourceRoot,function(data)
+    browserValue("__mtaPhoneDark",data)
 end)

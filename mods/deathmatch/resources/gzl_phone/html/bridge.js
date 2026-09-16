@@ -6,7 +6,8 @@
     let active = false
     let bootstrap = {}
     let lastCameraImage = ""
-    const localPhotoKey = "cylex_phone:mtaPhotos"
+    let musicUnavailableShown = false
+    const localPhotoKey = () => "cylex_phone:mtaPhotos:" + encodeURIComponent(mediaOwner())
     const froglyPostsKey = "cylex_phone:froglyPosts"
     const getFroglyPosts = () => {
         try {
@@ -69,6 +70,90 @@
 
     const post = payload => window.postMessage(payload, "*")
     const storeState = () => window.$store && window.$store.state
+    let englishLocales
+    const originalLabels = new WeakMap()
+    const applyLanguage = language => {
+        const state = storeState()
+        if (!state?.Config?.locales) return
+        if (!englishLocales) englishLocales = JSON.parse(JSON.stringify(state.Config.locales))
+        const translated = window.__mtaPhoneLocales?.[language]
+        if (language !== "en" && !translated) return false
+        state.Config.locales = JSON.parse(JSON.stringify(translated || englishLocales))
+        state.Config.locales.settings.language = language === "tr" ? "Dil" : "Language"
+        const translateLabels = value => {
+            if (!value || typeof value !== "object") return
+            if (typeof value.label === "string") {
+                if (!originalLabels.has(value)) originalLabels.set(value, value.label)
+                const original = originalLabels.get(value)
+                value.label = language === "tr" ? (window.__mtaPhoneTurkishLabels?.[original] || original) : original
+            }
+            for (const child of Object.values(value)) if (child && typeof child === "object") translateLabels(child)
+        }
+        translateLabels(state.Config)
+        state.Config.language = language
+        state.Config.dateLanguage = language === "tr" ? "tr-TR" : "en-US"
+        state.language = language
+        document.documentElement.lang = language
+        return true
+    }
+    const showError = message => {
+        if (!document.body) return
+        let toast = document.getElementById("mta-phone-error")
+        if (!toast) {
+            toast = document.createElement("div")
+            toast.id = "mta-phone-error"
+            toast.setAttribute("role", "alert")
+            document.body.appendChild(toast)
+        }
+        toast.textContent = String(message)
+        toast.hidden = false
+        clearTimeout(toast.hideTimer)
+        toast.hideTimer = setTimeout(() => { toast.hidden = true }, 5000)
+    }
+    const applySocial = service => {
+        if (!service || !service.app) return
+        bootstrap.appServices = bootstrap.appServices || {}
+        bootstrap.appServices[service.app] = service
+        const state = storeState()
+        if (!state) return
+        for (const account of Object.values(service.accounts || {})) {
+            for (const key of ["following","followers","notifications","photos","interests"]) if (!Array.isArray(account[key])) account[key] = []
+        }
+        for (const post of Array.isArray(service.posts) ? service.posts : []) {
+            for (const key of ["images","comments","likes","purchased","retweets"]) if (!Array.isArray(post[key])) post[key] = []
+            for (const comment of post.comments) if (!Array.isArray(comment.likes)) comment.likes = []
+        }
+        state.data.AppAccounts[service.app] = service.accounts || {}
+        state.self_userdata.selectedAccounts[service.app] = service.selected || {tag:"", password:"", logged:false}
+        const app = state.appdata[service.app]
+        const appConfig = state.Config?.apps?.find(item => item.name === service.app)
+        if (appConfig && service.prices) {
+            appConfig.VerifiedAccountPrice = service.prices.verified
+            appConfig.GoldAccountPrice = service.prices.gold
+        }
+        if (app) {
+            app[service.app === "twitter" ? "tweets" : "posts"] = Array.isArray(service.posts) ? service.posts : []
+            app.messages = service.messages || {}
+            if (service.app === "foffy" || service.app === "swiper") {
+                app.messages = {}
+                const self = service.selected?.tag || ""
+                for (const [target, chat] of Object.entries(service.messages || {})) {
+                    const id = [self, target].sort().join("_")
+                    if (!Array.isArray(chat.messages)) chat.messages = []
+                    app.messages[id] = {...chat, id, otherTag:target, unreadCount:chat.unread || 0}
+                    post({action:service.app + ":dm:chatUpdate", convId:id, ...chat})
+                }
+            }
+            if (service.app === "instagram") app.story = service.stories || {}
+        }
+    }
+    window.__mtaPhoneSocial = applySocial
+    window.__mtaPhoneDark = conversations => {
+        const state=storeState()
+        if (!state) return
+        state.appdata.darkchat.messages=conversations || {}
+        for (const [id,chat] of Object.entries(conversations || {})) post({action:"darkchat:dm:chatUpdate",convId:id,...chat})
+    }
     const cleanNumber = value => String(value == null ? "" : value).replace(/\s+/g, "")
     const splitName = value => {
         const parts = String(value || "").replace(/_/g, " ").trim().split(/\s+/)
@@ -199,18 +284,18 @@
     const syncBootstrapState = () => {
         const state = storeState()
         if (!state) return
+        applyLanguage(localStorage.getItem("cylex_phone:language") || "en")
         state.data.contacts = contactList(bootstrap.contacts)
         state.data.recentCalls = callList(bootstrap.callHistory || bootstrap.calls)
         state.data.bank = Number(bootstrap.bankBalance || 0)
         state.appdata.gallery.photos = photoList(bootstrap.photos)
+        state.appdata.gallery.photo_albums = Array.isArray(bootstrap.settings?.photo_albums) ? bootstrap.settings.photo_albums : []
         state.appdata.bank.transactions = transactionList(bootstrap.transactions)
         state.appdata.notes.notes = noteList(bootstrap.notes)
         state.self_userdata.notes = noteList(bootstrap.notes)
         state.appdata.messages.messages = conversations()
         state.appdata.twitter.tweets = Array.isArray(bootstrap.tweets) ? bootstrap.tweets : []
-        if (state.appdata && state.appdata.frogly) {
-            state.appdata.frogly.posts = getFroglyPosts()
-        }
+        for (const service of Object.values(bootstrap.appServices || {})) applySocial(service)
     }
 
     const firstLoginPayload = () => {
@@ -218,22 +303,10 @@
         const cleanName = (bootstrap.playerName || "oyuncu").replace(/[^a-zA-Z0-9_]/g, "").toLowerCase() || "oyuncu"
         const settings = bootstrap.settings || {}
         const wallpaper = settings.wallpaper && String(settings.wallpaper).startsWith("images/") ? settings.wallpaper : "images/background/b1.png"
-        const selectedAccounts = settings.selectedAccounts || {
-            twitter: { tag: cleanName, password: "gzl", logged: true },
-            instagram: { tag: cleanName, password: "gzl", logged: true },
-            hacker: { tag: cleanName, password: "gzl", logged: false },
-            frogly: { tag: cleanName, password: "gzl", logged: true },
-            swiper: { tag: cleanName, password: "gzl", logged: false },
-            foffy: { tag: cleanName, password: "gzl", logged: false }
-        }
-        if (!selectedAccounts.frogly || !selectedAccounts.frogly.tag) {
-            selectedAccounts.frogly = { tag: cleanName, password: "gzl", logged: true }
-        }
-        if (!selectedAccounts.twitter || !selectedAccounts.twitter.tag) {
-            selectedAccounts.twitter = { tag: cleanName, password: "gzl", logged: true }
-        }
-        if (!selectedAccounts.instagram || !selectedAccounts.instagram.tag) {
-            selectedAccounts.instagram = { tag: cleanName, password: "gzl", logged: true }
+        const services = bootstrap.appServices || {}
+        const selectedAccounts = {}
+        for (const app of ["frogly", "twitter", "instagram", "foffy", "swiper", "hacker"]) {
+            selectedAccounts[app] = services[app]?.selected || { tag: "", password: "", logged: false }
         }
         return {
             version: "9123845690325481243",
@@ -289,39 +362,14 @@
                 contacts: contactList(bootstrap.contacts),
                 recentCalls: callList(bootstrap.callHistory || bootstrap.calls),
                 jobs: bootstrap.jobs || { allJobs: [], groups: [], playerJob: "" },
-                AppAccounts: {
-                    frogly: {
-                        [cleanName]: {
-                            tag: cleanName,
-                            nickname: bootstrap.playerName || "Oyuncu",
-                            picture: bootstrap.picture || "images/icons/default-user.png",
-                            verified: false
-                        }
-                    },
-                    twitter: {
-                        [cleanName]: {
-                            tag: cleanName,
-                            nickname: bootstrap.playerName || "Oyuncu",
-                            picture: bootstrap.picture || "images/icons/default-user.png",
-                            verified: false
-                        }
-                    },
-                    instagram: {
-                        [cleanName]: {
-                            tag: cleanName,
-                            nickname: bootstrap.playerName || "Oyuncu",
-                            picture: bootstrap.picture || "images/icons/default-user.png",
-                            verified: false
-                        }
-                    }
-                }
+                AppAccounts: Object.fromEntries(Object.entries(services).map(([app, service]) => [app, service.accounts || {}]))
             },
             appdata: {
                 gallery: { photos: photoList(bootstrap.photos), photo_albums: [] },
                 bank: { transactions: transactionList(bootstrap.transactions) },
                 notes: { notes: noteList(bootstrap.notes) },
                 frogly: {
-                    posts: getFroglyPosts(),
+                    posts: services.frogly?.posts || [],
                     explorePosts: [],
                     messages: {}
                 }
@@ -330,14 +378,16 @@
     }
 
     const applyBootstrap = value => {
+        const previousOwner = mediaOwner()
         bootstrap = parse(value) || {}
-        const savedPhotos = parse(localStorage.getItem(localPhotoKey))
+        const sameOwner = previousOwner !== "" && previousOwner === mediaOwner()
+        const savedPhotos = parse(localStorage.getItem(localPhotoKey()))
         if (Array.isArray(savedPhotos) && savedPhotos.length) {
             const remotePhotos = Array.isArray(bootstrap.photos) ? bootstrap.photos : []
             const known = new Set(remotePhotos.map(photo => String(photo.id || photo.url || photo.src || photo.photo)))
             bootstrap.photos = [...savedPhotos.filter(photo => !known.has(String(photo.id || photo.url || photo.src || photo.photo))), ...remotePhotos]
         }
-        post({ action: "first_login", value: firstLoginPayload() })
+        if (!sameOwner) post({ action: "first_login", value: firstLoginPayload() })
         setTimeout(syncBootstrapState, 0)
         const revision = ++mediaRevision
         window.__mtaPhoneMedia.list(mediaOwner()).then(photos => {
@@ -351,9 +401,9 @@
     const saveLocalPhotos = () => {
         const photos = (Array.isArray(bootstrap.photos) ? bootstrap.photos : []).filter(photo => String(photo.url || photo.src || photo.photo || "").startsWith("data:image/")).slice(0, 8)
         try {
-            localStorage.setItem(localPhotoKey, JSON.stringify(photos))
+            localStorage.setItem(localPhotoKey(), JSON.stringify(photos))
         } catch {
-            if (photos.length > 1) localStorage.setItem(localPhotoKey, JSON.stringify(photos.slice(0, Math.ceil(photos.length / 2))))
+            if (photos.length > 1) localStorage.setItem(localPhotoKey(), JSON.stringify(photos.slice(0, Math.ceil(photos.length / 2))))
         }
     }
 
@@ -401,18 +451,102 @@
     }
 
     const normalize = (endpoint, value, requestData) => {
-        const result = parse(value)
+        let result = parse(value)
+        if (endpoint.startsWith("house:") && result?.success && Array.isArray(result.homes)) {
+            const state=storeState()
+            if (state) state.appdata.house.houses=result.homes
+        }
+        if (result && result.mtaDark) {
+            window.__mtaPhoneDark(result.mtaDark)
+            return result.value
+        }
+        if (result && result.mtaSocial) {
+            applySocial(result.mtaSocial)
+            result = result.value
+            if (endpoint === "swiper:messages:getConversations") return storeState()?.appdata.swiper.messages || {}
+            if ((endpoint === "swiper:purchaseGold" || endpoint === "swiper:purchaseVerified" || endpoint === "app:purchaseVerifiedAccount") && result?.success && result.balance != null) {
+                bootstrap.bankBalance=result.balance
+                if (storeState()) storeState().data.bank=result.balance
+            }
+            if (["twitter:getAllHashtags", "twitter:getHashtagCounts", "app:getNotifications", "appAccounts:clearNotifications"].includes(endpoint)) return Array.isArray(result) ? result : []
+            if (endpoint === "app:getFollowData" && result) {
+                if (!Array.isArray(result.following)) result.following = []
+                if (!Array.isArray(result.followers)) result.followers = []
+            }
+            if ((endpoint === "app:createAccount" || endpoint === "app:loginAccount") && result?.success) {
+                const app = requestData.app
+                const action = "change" + app.charAt(0).toUpperCase() + app.slice(1) + "Page"
+                window.$store?.dispatch(action, app === "swiper" ? "discover" : "home")
+            }
+            if (result && typeof result === "object") {
+                for (const key of ["posts","tweets"]) if (Array.isArray(result[key])) {
+                    for (const item of result[key]) {
+                        for (const field of ["images","comments","likes","purchased","retweets"]) if (!Array.isArray(item[field])) item[field]=[]
+                        for (const comment of item.comments) if (!Array.isArray(comment.likes)) comment.likes=[]
+                    }
+                }
+            }
+            return result
+        }
         if (endpoint.startsWith("camera:") && result && result.success) window.dispatchEvent(new CustomEvent("mta-camera-state", { detail: { endpoint, data: requestData, result } }))
-        if (endpoint === "callapp:getContacts") return contactList(result)
+        if (result && result.success === false) { showError(result.error || result.message || "Operation failed"); return result }
+        if (endpoint === "callapp:getContacts") {
+            bootstrap.contacts = Array.isArray(result) ? result : []
+            return contactList(bootstrap.contacts)
+        }
         if (endpoint === "messages:getConversations") return conversations()
         if (endpoint === "messages:getSpecificMessage") {
             const id = selectedMessageId(requestData)
             const item = conversations()[id]
             return { found: Boolean(item), messageId: id, messageData: item || null }
         }
-        if (endpoint === "messages:fetchChatMessages") return { success: true, hasMore: false, messages: (conversations()[selectedMessageId(requestData)] || {}).messages || [] }
-        if (endpoint === "bank:refreshBank") return { bank: Number(bootstrap.bankBalance || 0), balance: Number(bootstrap.bankBalance || 0), transactions: transactionList(bootstrap.transactions) }
-        if (endpoint === "yellowPage:fetchPosts" || endpoint === "yellowPage:fetchMore") return Array.isArray(result) ? result : []
+        if (endpoint === "messages:fetchChatMessages" || endpoint === "messages:markAsRead") {
+            const target = selectedMessageId(requestData)
+            bootstrap.messages = bootstrap.messages || {}
+            if (Array.isArray(result)) bootstrap.messages[target] = result
+            return { success: true, hasMore: false, messages: (bootstrap.messages[target] || []).map(messageItem) }
+        }
+        if (endpoint === "bank:refreshBank") {
+            if (result && result.bankBalance != null) bootstrap.bankBalance = result.bankBalance
+            if (result && Array.isArray(result.transactions)) bootstrap.transactions = result.transactions
+            const state = storeState()
+            if (state) {
+                state.data.bank = Number(bootstrap.bankBalance || 0)
+                state.appdata.bank.transactions = transactionList(bootstrap.transactions)
+            }
+            return { bank: Number(bootstrap.bankBalance || 0), balance: Number(bootstrap.bankBalance || 0), transactions: transactionList(bootstrap.transactions) }
+        }
+        if (endpoint === "yellowPage:fetchPosts" || endpoint === "yellowPage:fetchMore") {
+            const posts = (Array.isArray(result) ? result : []).map(row => ({...parse(row.data || {}), ...row,
+                text: row.content || row.text || "", phoneNumber: row.owner_number, identifier: row.owner_number,
+                images: row.image ? [row.image] : [], tag: parse(row.data || {}).tag || "all"}))
+            const filtered = posts.filter(row => (!requestData.searchText || `${row.title} ${row.text}`.toLowerCase().includes(requestData.searchText.toLowerCase())) && (!requestData.categoryTag || requestData.categoryTag === "all" || row.tag === requestData.categoryTag))
+            return {posts: endpoint === "yellowPage:fetchMore" ? [] : filtered, hasMore:false}
+        }
+        if (endpoint === "garage:getVehicles" && Array.isArray(result)) { const state=storeState(); if(state)state.appdata.garage.vehicles=result }
+        if (endpoint === "mail:getMails" && Array.isArray(result)) {
+            const state=storeState()
+            const escape=value=>String(value || "").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))
+            const mails=result.map(row=>({...row,sender:row.sender_name || row.sender_address || "",email:row.sender_address,
+                subject:row.subject || "",title:row.subject || "",message:escape(row.content),date:Number(row.time)*1000,unread:false}))
+            if(state)state.appdata.mail.mails=mails
+            return mails
+        }
+        if (endpoint.startsWith("gallery:") && result?.albums) {
+            bootstrap.settings = bootstrap.settings || {}
+            bootstrap.settings.photo_albums = result.albums
+            const state=storeState(); if(state)state.appdata.gallery.photo_albums=result.albums
+            if (endpoint === "gallery:toggleFavorite" && Array.isArray(result.photos)) {
+                bootstrap.photos=[...(bootstrap.photos || []).filter(photo=>photo.local),...result.photos]
+                if(state)state.appdata.gallery.photos=photoList(bootstrap.photos)
+            }
+        }
+        if (endpoint === "userData:changePhoneData" && result !== false) {
+            bootstrap.settings = bootstrap.settings || {}
+            bootstrap.settings[requestData.key] = requestData.value
+            const state=storeState()
+            if(state) {state.self_userdata[requestData.key]=requestData.value; if(requestData.key in state.data)state.data[requestData.key]=requestData.value}
+        }
         if (endpoint === "twitter:fetchTimeline" || endpoint === "twitter:fetchMore") return Array.isArray(result) ? result : []
         if (endpoint === "darkchat:fetchConversations" || endpoint === "darkchat:getConversations") return result && typeof result === "object" ? result : {}
         if (endpoint === "camera:enter" || endpoint === "camera:takePhoto") {
@@ -479,6 +613,7 @@
         clearTimeout(entry.timeout)
         pending.delete(String(id))
         if (failed) {
+            showError(String(failed))
             entry.resolve(response({ success: false, error: String(failed) }))
             return
         }
@@ -659,6 +794,12 @@
 
     window.fetch = (input, options = {}) => {
         const url = typeof input === "string" ? input : input && input.url || ""
+        if (url.startsWith("https://proxy.cylexdev.com/")) {
+            const proxy = String(bootstrap.musicSearchProxy || "").replace(/\/$/, "")
+            if (/^https:\/\//.test(proxy)) return nativeFetch(proxy + url.slice("https://proxy.cylexdev.com".length), options)
+            if (!musicUnavailableShown) { showError("Music search is not configured on this server."); musicUnavailableShown=true }
+            return Promise.resolve({...response({error:"Music search is not configured"}),ok:false,status:503,statusText:"Service Unavailable"})
+        }
         if (url.startsWith("data:") || url.startsWith("blob:") || url.startsWith("http://mta/")) return nativeFetch(input, options)
         if (url.startsWith("https://fmapi.net/api/v2/")) return Promise.resolve(response({ status: "ok", data: { url: lastCameraImage } }))
         const prefix = "https://cylex_phone/"
@@ -671,94 +812,16 @@
             data = {}
         }
         if (data && typeof data.data === "object" && data.data !== null) data = data.data
-        if (endpoint === "frogly:sendPost") {
-            const charTag = ((bootstrap.playerName || "oyuncu").replace(/[^a-zA-Z0-9_]/g, "").toLowerCase()) || "oyuncu"
-            const posts = getFroglyPosts()
-            const post = {
-                id: Date.now(),
-                tag: charTag,
-                text: data.text || "",
-                images: Array.isArray(data.images) ? data.images : (data.images ? [data.images] : []),
-                price: Number(data.price || 0),
-                time: Math.floor(Date.now() / 1000),
-                likes: [],
-                comments: [],
-                purchased: []
-            }
-            posts.unshift(post)
-            saveFroglyPosts(posts)
-            const state = storeState()
-            if (state && state.appdata && state.appdata.frogly) {
-                state.appdata.frogly.posts = posts
-            }
-            return Promise.resolve(response({ success: true, post }))
+        if (endpoint === "phone:changeLanguage") {
+            const language = data.language
+            if (language !== "en" && !window.__mtaPhoneLocales?.[language]) return Promise.resolve(response({success:false,error:"Language pack unavailable"}))
+            localStorage.setItem("cylex_phone:language", language)
+            applyLanguage(language)
+            return Promise.resolve(response({success:true, language}))
         }
-        if (endpoint === "frogly:fetchTimeline" || endpoint === "frogly:fetchExplorePosts" || endpoint === "frogly:getPosts") {
-            const posts = getFroglyPosts()
-            return Promise.resolve(response({ success: true, posts, hasMore: false }))
-        }
-        if (endpoint === "frogly:sendPostComment") {
-            const charTag = ((bootstrap.playerName || "oyuncu").replace(/[^a-zA-Z0-9_]/g, "").toLowerCase()) || "oyuncu"
-            const posts = getFroglyPosts()
-            const target = posts.find(p => String(p.id) === String(data.id))
-            if (target) {
-                target.comments = target.comments || []
-                target.comments.push({
-                    id: Date.now(),
-                    tag: charTag,
-                    text: data.text || "",
-                    time: Math.floor(Date.now() / 1000),
-                    likes: []
-                })
-                saveFroglyPosts(posts)
-                const state = storeState()
-                if (state && state.appdata && state.appdata.frogly) {
-                    state.appdata.frogly.posts = posts
-                }
-            }
-            return Promise.resolve(response({ success: true }))
-        }
-        if (endpoint === "frogly:likePost") {
-            const charTag = ((bootstrap.playerName || "oyuncu").replace(/[^a-zA-Z0-9_]/g, "").toLowerCase()) || "oyuncu"
-            const posts = getFroglyPosts()
-            const target = posts.find(p => String(p.id) === String(data.id))
-            if (target) {
-                target.likes = target.likes || []
-                const idx = target.likes.indexOf(charTag)
-                if (idx === -1) target.likes.push(charTag)
-                else target.likes.splice(idx, 1)
-                saveFroglyPosts(posts)
-                const state = storeState()
-                if (state && state.appdata && state.appdata.frogly) {
-                    state.appdata.frogly.posts = posts
-                }
-            }
-            return Promise.resolve(response({ success: true }))
-        }
-        if (endpoint === "app:createAccount" || endpoint === "app:loginAccount") {
-            const app = data.app || "frogly"
-            const tag = (data.tag || "").toLowerCase()
-            const state = storeState()
-            if (state) {
-                if (state.self_userdata && state.self_userdata.selectedAccounts) {
-                    state.self_userdata.selectedAccounts[app] = {
-                        tag,
-                        password: data.password || "",
-                        logged: true
-                    }
-                }
-                if (state.data && state.data.AppAccounts) {
-                    state.data.AppAccounts[app] = state.data.AppAccounts[app] || {}
-                    state.data.AppAccounts[app][tag] = {
-                        tag,
-                        nickname: data.nickname || data.tag,
-                        picture: bootstrap.picture || "images/icons/default-user.png",
-                        verified: false
-                    }
-                }
-            }
-            return Promise.resolve(response({ success: true }))
-        }
+        if (endpoint === "phone:selectedApp" || endpoint === "messages:setMessageId" || endpoint === "notification:sound" || endpoint === "genericNotificationResponse") return Promise.resolve(response({success:true}))
+        if (endpoint === "notifications:getPending") return Promise.resolve(response({notifications:[]}))
+        if (endpoint === "notifications:clearAllPending" || endpoint === "notifications:clearPending" || endpoint === "notifications:clearNotificationApp") return Promise.resolve(response({success:true}))
         if (endpoint === "gallery:removePhotos" || endpoint === "gallery:removeBrokenImages") {
             const ids = Array.isArray(data.ids) ? data.ids : [data.id]
             const localIds = ids.filter(id => String(id).startsWith("mta-capture-"))
@@ -792,7 +855,8 @@
             const id = String(++sequence)
             const timeout = setTimeout(() => {
                 pending.delete(id)
-                resolve(response(fallback(endpoint, data)))
+                showError("The server did not respond. Please try again.")
+                resolve(response({ success: false, error: "request_timeout" }))
             }, 10000)
             pending.set(id, { resolve, timeout, endpoint, data })
             window.mta.triggerEvent("cylex_phone:browserRequest", id, endpoint, JSON.stringify(data))
@@ -873,9 +937,6 @@
                 event.preventDefault()
                 window.mta.triggerEvent("cylex_phone:closeRequest")
             }
-        } else if ((event.key === "F1" || event.key === "F4") && window.mta && typeof window.mta.triggerEvent === "function") {
-            event.preventDefault()
-            window.mta.triggerEvent("cylex_phone:closeRequest")
         }
     }, true)
 

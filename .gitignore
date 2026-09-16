@@ -38,3 +38,6 @@ mods/deathmatch/resources/.performance/audit.json
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+*.rar
+*.zip

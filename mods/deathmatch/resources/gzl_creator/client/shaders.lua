@@ -3,6 +3,7 @@ local hideShader = nil
 local loadedTextures = {}
 local pedShaders = {}
 local pedHeadRenderTargets = {}
+local removeFromRestoreQueue
 
 local function initShaders()
     if not isElement(hideShader) then
@@ -340,7 +341,7 @@ local function clearRestoreQueue()
     restoreQueue = {}
 end
 
-local function removeFromRestoreQueue(elem)
+removeFromRestoreQueue = function(elem)
     if #restoreQueue == 0 then return end
     for i = #restoreQueue, 1, -1 do
         if restoreQueue[i] == elem then

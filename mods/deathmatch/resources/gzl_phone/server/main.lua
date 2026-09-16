@@ -4,7 +4,29 @@ local ActiveCalls = {}
 local RequestWindows = {}
 local ClientReady = {}
 local DataLoadInProgress = {}
+local AppAuthWindows = {}
+local PreviousVoice = {}
+local function restoreVoice(player)
+    if not PreviousVoice[player] then return end
+    if isElement(player) then
+        local recipients = root
+        local radio = getResourceFromName("gzl_radio")
+        if radio and getResourceState(radio) == "running" then
+            local channel = exports.gzl_radio:getRadioChannel(player)
+            if channel then
+                recipients = {}
+                for _, other in ipairs(getElementsByType("player")) do
+                    if other ~= player and exports.gzl_radio:getRadioChannel(other) == channel then recipients[#recipients+1] = other end
+                end
+            end
+        end
+        setPlayerVoiceBroadcastTo(player, recipients)
+    end
+    PreviousVoice[player] = nil
+end
+
 local AllowedEndpoints = {
+    appRequest = true,
     getBootstrapData = true,
     saveWallpaper = true,
     updateSettings = true,
@@ -51,8 +73,6 @@ local AllowedEndpoints = {
     createNote = true,
     addNote = true,
     deleteNote = true,
-    getDarkMessages = true,
-    sendDarkMessage = true,
     viewTweets = true,
     updateTweets = true,
     postTweet = true,
@@ -68,7 +88,11 @@ local AllowedEndpoints = {
 function getPlayerByPhoneNumber(number)
     if not number then return nil end
     local clean = tostring(number):gsub("%s+", "")
-    return OnlinePhones[clean] or OnlinePhones[tostring(number)]
+    local player = OnlinePhones[clean] or OnlinePhones[tostring(number)]
+    if not isElement(player) then return nil end
+    local currentId = tonumber(getElementData(player, "char:id") or getElementData(player, "character:id"))
+    if not PlayerData[player] or PlayerData[player].charId ~= currentId then return nil end
+    return player
 end
 
 function addPlayerCallRecord(player, callObj)
@@ -105,9 +129,13 @@ function addOfflineCallRecord(phoneNumber, callObj)
     end, db, "SELECT calls FROM phone_users WHERE phone_number = ? LIMIT 1", tostring(phoneNumber))
 end
 
+local function characterId(player)
+    return tonumber(getElementData(player, "char:id") or getElementData(player, "character:id"))
+end
+
 local function generatePhoneNumber(charId)
     if charId then
-        local padded = string.format("%04d", charId % 10000)
+        local padded = string.format("%04d", charId)
         return "555-" .. padded
     end
     return "555-" .. tostring(math.random(1000, 9999))
@@ -115,7 +143,7 @@ end
 
 local function generateIBAN(charId)
     if charId then
-        local padded = string.format("%04d", charId % 10000)
+        local padded = string.format("%04d", charId)
         return "GZL-" .. padded
     end
     return "GZL-" .. tostring(math.random(1000, 9999))
@@ -124,7 +152,8 @@ end
 function loadPlayerPhoneData(player)
     if not isElement(player) then return end
     if DataLoadInProgress[player] then return end
-    local charId = getElementData(player, "char:id") or getElementData(player, "character:id") or getElementData(player, "account:id") or 1
+    local charId = characterId(player)
+    if not charId or charId <= 0 then return end
     local db = getPhoneDB()
     if not db then return end
 
@@ -133,6 +162,13 @@ function loadPlayerPhoneData(player)
         local result = dbPoll(qh, 0)
         DataLoadInProgress[player] = nil
         if not isElement(player) then return end
+        if characterId(player) ~= charId then
+            loadPlayerPhoneData(player)
+            return
+        end
+        if not result then return end
+        local previous = PlayerData[player]
+        if previous then OnlinePhones[tostring(previous.number)] = nil end
         if result and #result > 0 then
             local row = result[1]
             local pData = {
@@ -206,6 +242,22 @@ addEventHandler("onPlayerSpawn", root, function()
     loadPlayerPhoneData(source)
 end)
 
+addEventHandler("onElementDataChange",root,function(key)
+    if key ~= "char:id" and key ~= "character:id" then return end
+    local data = PlayerData[source]
+    if not data or data.charId == characterId(source) then return end
+    OnlinePhones[tostring(data.number)] = nil
+    local call = ActiveCalls[source]
+    if call and isElement(call.target) then
+        restoreVoice(call.target)
+        ActiveCalls[call.target] = nil
+        triggerClientEvent(call.target,"cylex_phone:endCall",resourceRoot)
+    end
+    restoreVoice(source)
+    ActiveCalls[source] = nil
+    PlayerData[source] = nil
+end)
+
 addEvent("cylex_phone:requestBootstrap", true)
 addEventHandler("cylex_phone:requestBootstrap", resourceRoot, function()
     local player = client or source
@@ -254,13 +306,16 @@ addEventHandler("onPlayerQuit", root, function()
             }
             addPlayerCallRecord(otherPlayer, otherCall)
             triggerClientEvent(otherPlayer, "cylex_phone:endCall", resourceRoot)
+            restoreVoice(otherPlayer)
             ActiveCalls[otherPlayer] = nil
         end
     end
 
     PlayerData[source] = nil
+    PreviousVoice[source] = nil
     ActiveCalls[source] = nil
     RequestWindows[source] = nil
+    AppAuthWindows[source] = nil
     ClientReady[source] = nil
     DataLoadInProgress[source] = nil
 end)
@@ -281,19 +336,49 @@ addEventHandler("cylex_phone:serverCallback", root, function(endpoint, data, cbI
         return
     end
     if data ~= nil and type(data) ~= "table" then return end
-    local pData = PlayerData[player] or {}
+    data = data or {}
+    local pData = PlayerData[player]
+    if not pData or pData.charId ~= characterId(player) or not getPhoneDB() then
+        loadPlayerPhoneData(player)
+        triggerClientEvent(player, "cylex_phone:serverCallbackResponse", resourceRoot, cbId, { success = false, error = "character_not_ready" })
+        return
+    end
     local myNumber = pData.number or "555-0000"
     local myIban = pData.iban or "GZL-0000"
     local db = getPhoneDB()
 
     local function sendResponse(resData)
+        if not isElement(player) or characterId(player) ~= pData.charId then return end
         triggerClientEvent(player, "cylex_phone:serverCallbackResponse", resourceRoot, cbId, resData or {})
     end
 
-    if endpoint == "getBootstrapData" then
-        local charId = getElementData(player, "char:id") or getElementData(player, "character:id") or getElementData(player, "account:id") or 1
+    if endpoint == "appRequest" then
+        if type(data.endpoint) ~= "string" or #data.endpoint > 80 or type(data.payload) ~= "table" then
+            sendResponse({success=false,error="Invalid application request"}) return
+        end
+        local encoded = toJSON(data.payload)
+        if not encoded or #encoded > 65536 then sendResponse({success=false,error="Application request is too large."}) return end
+        if data.endpoint == "app:createAccount" or data.endpoint == "app:loginAccount" or data.endpoint == "app:changePassword" or data.endpoint == "darkchat:createNewChat" or data.endpoint == "darkchat:joinChat" then
+            local window = AppAuthWindows[player]
+            if not window or now-window.started >= 60000 then window={started=now,count=0} AppAuthWindows[player]=window end
+            window.count=window.count+1
+            if window.count>10 then sendResponse({success=false,error="Too many account attempts. Please wait a minute."}) return end
+        end
+        if data.endpoint:find("^darkchat:") then
+            PhoneDark.handle(player,pData,data.endpoint,data.payload,sendResponse)
+        elseif data.endpoint:find('^house:') then
+            PhoneHomes.handle(player,pData,data.endpoint,data.payload,sendResponse)
+        elseif PhoneUtilities.supports(data.endpoint) then
+            PhoneUtilities.handle(player,pData,data.endpoint,data.payload,sendResponse)
+        else
+            PhoneApps.handle(player,pData.charId,data.endpoint,data.payload,sendResponse)
+        end
+        return
+    elseif endpoint == "getBootstrapData" then
+        local charId = pData.charId
         dbQuery(function(qhUser)
             local userRows = dbPoll(qhUser, 0) or {}
+            if not isElement(player) or characterId(player) ~= charId then return end
             if #userRows > 0 then
                 local row = userRows[1]
                 pData = {
@@ -342,6 +427,8 @@ addEventHandler("cylex_phone:serverCallback", root, function(endpoint, data, cbI
                                         bankBalance = bank,
                                         wallpaper = (pData.settings and pData.settings.wallpaper) or "components/media/74ebb5cae06a3d0699398ed780f12fe5.jpg",
                                         settings = pData.settings or {},
+                                        appServices = PhoneApps.bootstrap(pData.charId),
+                                        musicSearchProxy = Config.MusicSearchProxy or "",
                                         photos = pData.photos or {},
                                         contacts = contacts,
                                         calls = pData.calls or {},
@@ -353,9 +440,8 @@ addEventHandler("cylex_phone:serverCallback", root, function(endpoint, data, cbI
                                         transactions = transactions,
                                         darkMessages = darkMsgs
                                     }
-                                    triggerClientEvent(player, "cylex_phone:receiveBootstrapData", resourceRoot, bootData)
                                     sendResponse(bootData)
-                                end, db, "SELECT * FROM phone_darkmessages ORDER BY id DESC LIMIT 50")
+                                end, db, "SELECT * FROM phone_darkmessages WHERE 1=0")
                             end, db, "SELECT * FROM phone_transactions WHERE from_iban = ? OR to_iban = ? ORDER BY id DESC LIMIT 30", myIban, myIban)
                         end, db, "SELECT * FROM phone_tweets ORDER BY id DESC LIMIT 50")
                     end, db, "SELECT * FROM phone_messages WHERE from_number = ? OR to_number = ? ORDER BY time ASC LIMIT 300", myNumber, myNumber)
@@ -373,9 +459,10 @@ addEventHandler("cylex_phone:serverCallback", root, function(endpoint, data, cbI
         sendResponse("ok")
 
     elseif endpoint == "updateSettings" then
-        if data and data.settings then
-            pData.settings = data.settings
-            dbExec(db, "UPDATE phone_users SET settings = ? WHERE phone_number = ? OR char_id = ?", toJSON(data.settings), myNumber, pData.charId)
+        if type(data.key) == "string" and #data.key <= 64 and data.key ~= "photo_albums" then
+            pData.settings = pData.settings or {}
+            pData.settings[data.key] = data.value
+            dbExec(db, "UPDATE phone_users SET settings = ? WHERE phone_number = ? OR char_id = ?", toJSON(pData.settings), myNumber, pData.charId)
         end
         sendResponse("ok")
 
@@ -841,6 +928,8 @@ addEventHandler("cylex_phone:serverCallback", root, function(endpoint, data, cbI
                 ActiveCalls[callInfo.target].activeStartTick = getTickCount()
             end
 
+            PreviousVoice[player] = true
+            PreviousVoice[callInfo.target] = true
             setPlayerVoiceBroadcastTo(player, callInfo.target)
             setPlayerVoiceBroadcastTo(callInfo.target, player)
 
@@ -866,8 +955,8 @@ addEventHandler("cylex_phone:serverCallback", root, function(endpoint, data, cbI
             local callerP = callInfo.isCaller and player or otherPlayer
             local targetP = callInfo.isCaller and otherPlayer or player
 
-            if isElement(player) then setPlayerVoiceBroadcastTo(player, nil) end
-            if isElement(otherPlayer) then setPlayerVoiceBroadcastTo(otherPlayer, nil) end
+            restoreVoice(player)
+            restoreVoice(otherPlayer)
 
             if isElement(callerP) then
                 local callCaller = {
@@ -1085,6 +1174,29 @@ addEventHandler("cylex_phone:serverCallback", root, function(endpoint, data, cbI
                     local targetCharId = targetRow.char_id
                     local targetNum = targetRow.phone_number
 
+                    if not isElement(player) or characterId(player) ~= pData.charId then return end
+                    if tonumber(targetCharId) == tonumber(pData.charId) then
+                        sendResponse({ success = false, message = "Kendi hesabınıza transfer yapamazsınız." })
+                        return
+                    end
+                    playerBank = tonumber(getElementData(player, "character:bank") or getElementData(player, "char:bank_money") or getElementData(player, "char:bank")) or 0
+                    if playerBank < amount then
+                        sendResponse({ success = false, message = "Yetersiz bakiye!" })
+                        return
+                    end
+                    local targetPlayer = getPlayerByPhoneNumber(targetNum)
+                    local offlineDB
+                    if not isElement(targetPlayer) then
+                        local charRes = getResourceFromName("gzl_characters")
+                        if charRes and getResourceState(charRes) == "running" then
+                            offlineDB = exports.gzl_characters:getCharacterDB()
+                        end
+                        if not offlineDB or not dbExec(offlineDB, "UPDATE characters SET bank_money = bank_money + ? WHERE id = ?", amount, targetCharId) then
+                            sendResponse({ success = false, message = "Alıcı hesabı güncellenemedi." })
+                            return
+                        end
+                    end
+
                     local newSenderBank = playerBank - amount
                     setElementData(player, "character:bank", newSenderBank, "broadcast", "deny")
                     setElementData(player, "char:bank_money", newSenderBank)
@@ -1106,7 +1218,7 @@ addEventHandler("cylex_phone:serverCallback", root, function(endpoint, data, cbI
                         type = "debit"
                     }
 
-                    local targetP = OnlinePhones[tostring(targetNum)]
+                    local targetP = getPlayerByPhoneNumber(targetNum)
                     if isElement(targetP) then
                         local recBank = tonumber(getElementData(targetP, "character:bank") or getElementData(targetP, "char:bank_money") or getElementData(targetP, "char:bank")) or 0
                         local newRecBank = recBank + amount
@@ -1128,14 +1240,6 @@ addEventHandler("cylex_phone:serverCallback", root, function(endpoint, data, cbI
                             time = nowTick,
                             type = "credit"
                         })
-                    else
-                        local charRes = getResourceFromName("gzl_characters")
-                        if charRes and exports.gzl_characters and exports.gzl_characters.getCharacterDB then
-                            local cDb = exports.gzl_characters:getCharacterDB()
-                            if cDb and targetCharId then
-                                dbExec(cDb, "UPDATE characters SET bank_money = bank_money + ? WHERE id = ?", amount, targetCharId)
-                            end
-                        end
                     end
 
                     sendResponse({ success = true, balance = newSenderBank, transaction = newTxSender })
@@ -1184,8 +1288,10 @@ function sendPhoneNotification(player, title, message, appIcon)
     if isElement(player) then
         triggerClientEvent(player, "cylex_phone:sendNotification", resourceRoot, {
             title = title or "Bildirim",
-            content = message or "",
-            icon = appIcon or "fa-bell"
+            text = message or "",
+            type = "notification",
+            timeout = 5,
+            icon = { name = "app-icon/" .. tostring(appIcon or "messages"):gsub("[^%w_-]", "") .. ".png" }
         })
     end
 end
@@ -1299,7 +1405,7 @@ addEventHandler("onResourceStop", resourceRoot, function()
         if getElementData(player, "cylex_phone:holding") then
             setElementData(player, "cylex_phone:holding", nil, true)
         end
-        setPlayerVoiceBroadcastTo(player, nil)
+        restoreVoice(player)
     end
 end)
 

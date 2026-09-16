@@ -4,6 +4,8 @@ body{margin:0;contain:layout style paint}
 .phone-container{transform:translateZ(0);backface-visibility:hidden}
 html[data-phone-active="false"] video,html[data-phone-active="false"] audio{visibility:hidden}
 img{image-rendering:auto}
+#mta-phone-error{position:fixed;bottom:5%;left:50%;transform:translateX(-50%);max-width:340px;padding:12px 18px;border-radius:12px;background:#241f2b;color:#fff;z-index:2147483647;font:14px/1.4 Arial,sans-serif;box-shadow:0 4px 20px #0006;pointer-events:none}
+#mta-phone-error[hidden]{display:none}
 #tempCanvasCamera{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;touch-action:none;cursor:grab}
 #tempCanvasCamera:active{cursor:grabbing}
 .mta-camera-transparent{background:transparent!important;background-image:none!important}

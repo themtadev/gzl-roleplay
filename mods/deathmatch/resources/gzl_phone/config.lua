@@ -3,6 +3,12 @@ Config.ServerName = "GZL Roleplay"
 Config.Currency = "$"
 Config.OpenKey = "F1"
 Config.Command = "telefon"
+-- Optional compatible YouTube search proxy owned/configured by this server.
+-- The old Cylex proxy requires credentials that are not included in this resource.
+Config.MusicSearchProxy = ""
+Config.PhoneVerifiedPrice = 10000
+Config.SwiperGoldPrice = 1000
+Config.PhoneSubscriptionDays = 30
 
 Config.ItemRequired = false
 Config.PhoneItem = "phone"
