@@ -1,6 +1,7 @@
 ﻿<meta>
     <info author="GZL Roleplay" type="script" name="GZL Chat" version="1.0.0" />
 
+    <script src="client/cef_diagnostics.lua" type="client" cache="false" />
     <script src="client/cl_chat.lua" type="client" cache="false" />
 
     <script src="server/utils.lua" type="server" />

@@ -3,6 +3,7 @@
     <min_mta_version client="1.6.0" server="1.6.0" />
     <oop>true</oop>
 
+    <script src="client/cef_diagnostics.lua" type="client" cache="false" />
     <script src="data/items.lua" type="shared" cache="false" />
     <script src="server/main.lua" type="server" />
     <script src="client/main.lua" type="client" cache="false" />

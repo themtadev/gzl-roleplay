@@ -3,11 +3,12 @@
     <min_mta_version client="1.6.0" server="1.6.0" />
     <oop>true</oop>
     
+    <script src="client/cef_diagnostics.lua" type="client" cache="false" />
     <script src="server/main.lua" type="server" />
     <script src="client/gui.lua" type="client" cache="false" />
     <script src="client/bottom_hud.lua" type="client" cache="false" />
     
-    <html src="dist/index.html" default="true" />
+    <file src="dist/index.html" />
     
     <file src="dist/assets/Consolas-9de4ef7b.ttf" />
     <file src="dist/assets/DS-DIGIB-db992dcd.TTF" />
