@@ -24,7 +24,8 @@ local function sendCharacterList(player, accountId)
 
     dbQuery(function(qh)
         local result = dbPoll(qh, 0)
-        if isElement(player) then
+        if isElement(player) and getElementData(player, "account:id") == accountId
+            and not getElementData(player, "loggedin_character") then
             triggerClientEvent(player, "char:receiveList", player, result or {})
         end
     end, db, "SELECT * FROM characters WHERE account_id = ? ORDER BY id ASC", accountId)
@@ -183,6 +184,12 @@ addEventHandler("char:create", root, function(rawName, gender, age, skin, custom
                     if insertedRows and #insertedRows > 0 then
                         local newChar = insertedRows[1]
                         if not isElement(player) then return end
+                        if getElementData(player, "account:id") ~= accountId then return end
+                        if not spawnPlayer(player, spawn.x, spawn.y, spawn.z, spawn.rot, skin, spawn.interior, spawn.dimension) then
+                            sendCharacterResponse(player, false, "Karakter kaydedildi ancak oyun dünyasına yerleştirilemedi. Lütfen tekrar seçin.")
+                            sendCharacterList(player, accountId)
+                            return
+                        end
 
                         setElementData(player, "character:id", newChar.id, "broadcast", "deny")
                         setElementData(player, "character:name", newChar.name)
@@ -206,14 +213,14 @@ addEventHandler("char:create", root, function(rawName, gender, age, skin, custom
 
                         setPlayerMoney(player, tonumber(newChar.money) or CharConfig.DefaultCash)
 
-                        spawnPlayer(player, spawn.x, spawn.y, spawn.z, spawn.rot, skin, spawn.interior, spawn.dimension)
-                        setElementDimension(player, 0)
-                        setElementInterior(player, 0)
+                        setElementDimension(player, spawn.dimension)
+                        setElementInterior(player, spawn.interior)
                         setElementAlpha(player, 255)
                         setElementFrozen(player, false)
                         setElementHealth(player, 100)
                         setPedArmor(player, 0)
                         setCameraTarget(player, player)
+                        setCameraInterior(player, spawn.interior)
                         fadeCamera(player, true, 1.5)
 
                         authoritativeCharacters[player] = { id = newChar.id, name = newChar.name, accountId = accountId }
@@ -255,6 +262,7 @@ addEventHandler("char:select", root, function(characterId)
         if result and #result > 0 then
             local row = result[1]
             if not isElement(player) then return end
+            if getElementData(player, "account:id") ~= accountId then return end
 
             local customData = nil
             if row.customization and row.customization ~= "" and row.customization ~= "{}" then
@@ -262,6 +270,25 @@ addEventHandler("char:select", root, function(characterId)
                 if type(customData) == "table" and customData[1] and type(customData[1]) == "table" then
                     customData = customData[1]
                 end
+            end
+
+            local px = tonumber(row.pos_x) or CharConfig.DefaultSpawn.x
+            local py = tonumber(row.pos_y) or CharConfig.DefaultSpawn.y
+            local pz = tonumber(row.pos_z) or CharConfig.DefaultSpawn.z
+            local prot = tonumber(row.rot_z) or CharConfig.DefaultSpawn.rot
+            local pskin = tonumber(row.skin) or 0
+            if type(customData) == "table" then
+                pskin = (customData.gender == "female") and 171 or 170
+            end
+            local pint = tonumber(row.interior) or 0
+            local pdim = tonumber(row.dimension) or 0
+            if pdim == 1337 or pdim >= 60000 then pdim = 0 end
+
+            -- Never publish a logged-in character or open its HUD after a failed spawn.
+            if not spawnPlayer(player, px, py, pz, prot, pskin, pint, pdim) then
+                outputDebugString("[GZL Characters] Spawn failed for character " .. tostring(row.id), 1)
+                sendCharacterResponse(player, false, "Karakter oyun dünyasına yerleştirilemedi. Lütfen yetkiliye bildirin.")
+                return
             end
 
             if type(customData) == "table" then
@@ -293,24 +320,12 @@ addEventHandler("char:select", root, function(characterId)
 
             dbExec(db, "UPDATE characters SET last_active = CURRENT_TIMESTAMP WHERE id = ?", row.id)
 
-            local px = tonumber(row.pos_x) or CharConfig.DefaultSpawn.x
-            local py = tonumber(row.pos_y) or CharConfig.DefaultSpawn.y
-            local pz = tonumber(row.pos_z) or CharConfig.DefaultSpawn.z
-            local prot = tonumber(row.rot_z) or CharConfig.DefaultSpawn.rot
-            local pskin = tonumber(row.skin) or 0
-            if type(customData) == "table" then
-                pskin = (customData.gender == "female") and 171 or 170
-            end
-            local pint = tonumber(row.interior) or 0
-            local pdim = tonumber(row.dimension) or 0
-            if pdim == 1337 or pdim >= 60000 then pdim = 0 end
-
-            spawnPlayer(player, px, py, pz, prot, pskin, pint, pdim)
             setElementDimension(player, pdim)
             setElementInterior(player, pint)
             setElementAlpha(player, 255)
             setPedArmor(player, tonumber(row.armor) or 0)
             setCameraTarget(player, player)
+            setCameraInterior(player, pint)
             fadeCamera(player, true, 1.5)
 
             local isDead = tonumber(row.is_dead) or 0

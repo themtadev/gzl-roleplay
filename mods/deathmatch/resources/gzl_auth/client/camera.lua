@@ -39,6 +39,11 @@ function stopAuthCamera()
         setPlayerHudComponentVisible("crosshair", true)
         setMinuteDuration(1000)
 
-        setCameraTarget(localPlayer, localPlayer)
+        setCameraTarget(localPlayer)
+        setCameraInterior(getElementInterior(localPlayer))
     end
 end
+
+-- Stop the render loop even if an optional login UI export failed.
+addEvent("char:spawnSuccess", true)
+addEventHandler("char:spawnSuccess", root, stopAuthCamera)

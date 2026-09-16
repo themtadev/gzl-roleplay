@@ -201,3 +201,9 @@ end
 function getPedCurrentRotation()
     return pedRotation
 end
+
+-- A spawn must release the per-frame camera even if UI/notification code fails.
+addEvent("char:spawnSuccess", true)
+addEventHandler("char:spawnSuccess", root, function()
+    if activeCamera then stopStudioCamera() end
+end)

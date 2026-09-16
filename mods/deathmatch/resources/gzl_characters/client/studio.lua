@@ -106,8 +106,11 @@ function hideStudioPed()
 end
 
 function stopCharacterStudio()
-    if not isStudioActive then return end
     isStudioActive = false
+    isDraggingPed = false
+    -- Restore the world before optional shader cleanup can fail.
+    setCameraTarget(localPlayer)
+    setCameraInterior(getElementInterior(localPlayer))
     hideStudioPed()
 end
 

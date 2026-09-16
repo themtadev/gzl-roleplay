@@ -1078,6 +1078,10 @@ function setCreatorVisible(visible)
         addEventHandler("onClientClick", root, handleCreatorClick)
     else
         stopStudioCamera()
+        -- Release the session before optional appearance cleanup can throw.
+        removeEventHandler("onClientRender", root, renderCreatorUI)
+        removeEventHandler("onClientClick", root, handleCreatorClick)
+        triggerServerEvent("gzl_creator:cancelSession", localPlayer)
         if isElement(studioPed) then
             if studioPed ~= localPlayer then
                 resetPedShaders(studioPed)
@@ -1108,27 +1112,24 @@ function setCreatorVisible(visible)
             studioPed = nil
         end
 
-        triggerServerEvent("gzl_creator:cancelSession", localPlayer)
         if isIngame then
             setPlayerHudComponentVisible("all", false)
             setPlayerHudComponentVisible("crosshair", true)
             showChat(true)
         end
 
-        removeEventHandler("onClientRender", root, renderCreatorUI)
-        removeEventHandler("onClientClick", root, handleCreatorClick)
     end
 end
 
 addEvent("gzl_creator:saveResponse", true)
 addEventHandler("gzl_creator:saveResponse", root, function(success, message)
     isSubmitting = false
-    if exports.gzl_ui and exports.gzl_ui.showNotification then
-        exports.gzl_ui:showNotification(success and "BAŞARILI" or "HATA", message, success and "success" or "error")
-    end
     if success then
         wasSaved = true
         setCreatorVisible(false)
+    end
+    if exports.gzl_ui and exports.gzl_ui.showNotification then
+        exports.gzl_ui:showNotification(success and "BAŞARILI" or "HATA", message, success and "success" or "error")
     end
 end)
 

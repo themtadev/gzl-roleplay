@@ -526,6 +526,8 @@ end)
 
 addEvent("char:receiveList", true)
 addEventHandler("char:receiveList", root, function(list)
+    -- A database reply requested before spawning must not reopen the studio.
+    if getElementData(localPlayer, "loggedin_character") then return end
     characterList = type(list) == "table" and list or {}
     for i = 1, #hudComponents do
         setPlayerHudComponentVisible(hudComponents[i], false)
@@ -576,6 +578,10 @@ addEvent("char:spawnSuccess", true)
 addEventHandler("char:spawnSuccess", root, function()
     isVisible = false
     isProcessing = false
+    removeEventHandler("onClientRender", root, renderCharacterGUI)
+    showCursor(false)
+    stopCharacterStudio()
+    fadeCamera(true, 0.5)
     if exports.gzl_ui and exports.gzl_ui.setActiveEditBox then
         exports.gzl_ui:setActiveEditBox(nil)
     end
@@ -584,8 +590,6 @@ addEventHandler("char:spawnSuccess", root, function()
     if exports.gzl_chat and exports.gzl_chat.setChatVisible then
         exports.gzl_chat:setChatVisible(true)
     end
-    stopCharacterStudio()
-    removeEventHandler("onClientRender", root, renderCharacterGUI)
 end)
 
 addEventHandler("onClientResourceStart", resourceRoot, function()
